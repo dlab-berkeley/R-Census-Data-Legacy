@@ -3,7 +3,8 @@ title: "Census Data Wrangling and Mapping in R"
 author: "Patty Frontiera"
 date: "12/4/2018"
 output: 
-  html_document
+  html_document:
+    keep_md: true
 ---
 
 ```{r setup, include=FALSE}
@@ -289,7 +290,7 @@ census_api_key(my_census_api_key)
 
 to the folder in which you unzipped the workshop files, e.g.,
 
-`setwd("~/Documents/Dlab/workshops/2018/rcensus")`
+`setwd("~/Documents/Dlab/workshops/2018/rCensus_workshop")`
 
 <img src="./data/swd.png" width="600px"></img>
 
