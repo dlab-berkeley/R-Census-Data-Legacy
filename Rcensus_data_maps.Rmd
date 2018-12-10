@@ -3,12 +3,14 @@ title: "Census Data Wrangling and Mapping in R"
 author: "Patty Frontiera"
 date: "12/4/2018"
 output: 
-  html_document:
-    keep_md: true
+  html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+  fig.path = "Rcensus_data_maps_files/figure-html/"
+)
 ```
 
 
