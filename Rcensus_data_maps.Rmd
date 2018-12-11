@@ -8,9 +8,6 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(
-  fig.path = "Rcensus_data_maps_files/figure-html/"
-)
 ```
 
 
@@ -226,6 +223,7 @@ A collection of R Packages for data science
  - `purr`, `readr` and `tibble` for improved performance 
 
 These packages are used by `tidyverse` under the hood.
+
 ## [sf](https://r-spatial.github.io/sf/)
 
 Simple features for geospatial data objects and methods.
@@ -253,7 +251,6 @@ library(tidycensus)
 library(tidyverse) 
 library(tigris)
 library(sf)
-library(dplyr)
 ```
 
 ## Install any packages that you do not have on your computer
@@ -282,7 +279,9 @@ For more info see:
 # If you set install=TRUE you need only do this once.
 
 #census_api_key("YOUR KEY GOES HERE", install = TRUE)
+```
 
+```{r, echo=FALSE}
 my_census_api_key <- "f2d6f4f743545d3a42a67412b05935dc7712c432"
 census_api_key(my_census_api_key)
 
