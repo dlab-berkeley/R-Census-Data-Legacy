@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
+# Getting Started
 
 ## Setup
 
@@ -45,6 +46,8 @@ Welcome! While we're waiting:
 - Use those packages to fetch census data plus census geograpic boundary files
 
 - Make maps of census data
+
+# Census Data Overview
 
 ## US Census Data
 
@@ -118,6 +121,7 @@ More data available for ACS 5 Year product
 ## Census Data Workflow
 
 Identify your 
+
 - topic of interest
 - year(s)
 - geographic level of detail
@@ -134,6 +138,7 @@ are available - ACS or Decennial?
 
 Measuring change over time with census data is *it's own thing*, complex and not covered by this workshop!
 
+# R Packages
 
 ## Packages for Working with Census Data
 
@@ -162,20 +167,19 @@ Limited set of years available via `tidycensus`
 - decennial census: 1990, 2000, and 2010
 - ACS 5 yr: 2005-2010 through 2012-2016 are available. 
 - Note: tidycensus referes to ACS 5year datasets by the endyear.
-
-Most recent ACS available is 2012-2016
-
-- 2013 - 2017 released [Dec 6, 2018](https://www.census.gov/programs-surveys/acs/news/data-releases/2017/release-schedule.html) by the Census. Need to check when available in `tidycensus` & update package.
+- 2013 - 2017 released [Dec 6, 2018](https://www.census.gov/programs-surveys/acs/news/data-releases/2017/release-schedule.html) by the Census. 
+    - Need to check its availability in `tidycensus`.
 
 ##  [tigris](https://github.com/walkerke/tigris)
 
 Provides access to census geographic data files
 
-    - detailed TIGER/Line boundary files (e.g., shapefiles), or
-    - simplified Cartographic boundary files
+- detailed TIGER/Line boundary files (e.g., shapefiles), or
+- simplified Cartographic boundary files
     
 Also provides access to census `feature data`,
-  - eg, rivers, roads, coastlands, landmarks, and more
+
+- eg, rivers, roads, coastlands, landmarks, and more
     
 
 Used by `tidycensus` to access state, county, tract, block group, block, and ZCTA boundaries.
@@ -252,7 +256,6 @@ library(tidycensus)
 library(tidyverse) 
 library(tigris)
 library(sf)
-library(dplyr)
 ```
 
 ## Install any packages that you do not have on your computer
@@ -270,23 +273,26 @@ Also install any dependancies.
 
 You need a census API key to programmatically fetch census data.
 
+Get it here (pretty quick):
+
 * (https://api.census.gov/data/key_signup.html)
 
 For more info see:
 
 * https://www.census.gov/data/developers/data-sets.html
 
+## Install your Census API Key
+
+You can use the tidycensus function `census_api_key` to use your key in the current R session.
+
+If you set `install=TRUE` R will save your key in the `~/.Renviron` file.
+
 ```{r, eval=F}
-# Install your census api key. 
-# If you set install=TRUE you need only do this once.
-
-census_api_key("YOUR KEY GOES HERE", install = TRUE)
-```
-
-```{r, echo=F}
-my_census_api_key <- "f2d6f4f743545d3a42a67412b05935dc7712c432"
-census_api_key(my_census_api_key)
-
+# Install your census api key - long alphanumeric string
+#
+census_api_key("YOUR_KEY_HERE", install=T)    # Install it - once
+readRenviron("~/.Renviron")                   # Read it - once
+Sys.getenv("CENSUS_API_KEY")                  # check it - as needed
 ```
 
 ## Set working directory
@@ -336,7 +342,7 @@ View(vars2010)
 
 - Topics: Population, housing
 
-- Tables: currenty `333`
+- Tables: currenty `333` - *that's a lot*!
     - 177 population tables (identified with a ‘‘P’’) available to the block level 
     - 58 housing tables (identified with an ‘‘H’’) available to the block level
     - 82 population tables (identified with a ‘‘PCT’’) available to the census tract level
@@ -369,7 +375,7 @@ pop2010 <- get_decennial(geography = "state",   # census tabulation unit
 
 - How many rows and columns? 
 
-- What column has the pop counts?
+- What column has the population counts?
 ```{r}
 pop2010
 ```
@@ -405,7 +411,7 @@ Fetch population data by state for 2000.
 
 ## Total Population in 2000
 
-```{r, eval = F}
+```{r, eval = F, code_folding = "hide"}
 # What is the variable name in 2000?
 vars2000 <- load_variables(year=2000, dataset = 'sf1', cache = T)
 
@@ -512,7 +518,7 @@ You can use names or FIPs codes as your `state` and `county` function arguments.
 # County FIPs Codes for
 # Alameda, SF, Contra Costa, Marin County, Napa, 
 # San Mateo, Santa Clara,  Solano,  Sonoma, santa cruz
-nine_counties <- c("001", "075", "013", "041", "055", "081", "085", "095", "097", "087")
+nine_counties <- c("001", "075", "013", "041", "055", "081", "085", "095", "097")
 
 # Your code below...
 bayarea_pop10 <-...
@@ -525,10 +531,29 @@ What `three` things are new here?
 ur_pop10 <- get_decennial(geography = "county",  # census tabulation unit
                            variables = c(urban="P002002",rural="P002005"),
                            year = 2010, 
-                           summary_var = "P002001",  # Total Urban - the denominator
+                           summary_var = "P002001",  # The denominator
                            state='CA',
                            county=c("Napa","Sonoma","Mendocino"))
 
+```
+
+## Fetching data for more than one census variable
+
+What `three` things are new here?
+
+1. You can specify more than one variable:
+```
+variables = c("P002002","P002005")
+```
+
+2. You can name the output columns.
+```
+variables = c(urban="P002002",rural="P002005")
+```
+
+3. You can identify a `summary_var`. This value is the denominator - the total count of all people or households surveyed. The values in this column will be used as a demoninator for other calcuations like percent of total. 
+```
+summary_var = "P002001"
 ```
 
 ## Take a look at the results
@@ -666,16 +691,6 @@ write.csv(pop2000_2010, file="pop2000_2010.csv", row.names = FALSE)
 
 # Part 2. Mapping
 
-## map topics
-
-- how to fetch
-- cb vs tl
-- ggplot vs tmap vs plot
-- components of an sf
-- saving to shapefile
-- crs issues esp. with census data
-- shift_geo option
-- other available data
 
 ## Mapping Census Data with `tidycensus`
 
@@ -691,14 +706,14 @@ Before fetching geometry, we need to specify a few `tigris` options
 
 - Set the `class` of returned data to be `sf` objects (not `sp`, the default)
 - Set `tigris_use_cache` to TRUE
-- Set `cache` directory (optional)
+- Set `cache` directory - **Set to a folder on your computer**
 
 ```{r}
 # Tigris options - used by tidycensus
 options(tigris_class = "sf")      # SP is the default format returned by tigris
 options(tigris_use_cache = TRUE)  # Save retrieved data locally
-#tigris_cache_dir("~/Documents/gis_data/census")  # Folder for local data
-
+tigris_cache_dir("~/Documents/gis_data/census")  # Folder for local data
+Sys.getenv('TIGRIS_CACHE_DIR') # Check it
 ```
 
 ## Fetch geographic boundary data with tidycensus
@@ -716,13 +731,21 @@ pop2010geo <- get_decennial(geography = "state",
 
 ## Take a look
 
+Let's take a minute to discuss the format of an `sf` spatial object.
 ```{r}
 pop2010geo
 ```
 
 ## Take a look at the file on our local computer
-```{r}
-Sys.getenv('TIGRIS_CACHE_DIR') # check cache dir
+
+Because we set `tigris_use_cache = TRUE`, the geographic data are saved locally as an [ESRI Shapefile](https://en.wikipedia.org/wiki/Shapefile), the most common geospatial data file format.  We can use this file for other geospatial mapping and analysis tasks since we have it stored locally. Let's check it out.
+
+First, check to see what the directory is.
+```{r, eval=F}
+my_cache_dir <- Sys.getenv('TIGRIS_CACHE_DIR') 
+
+dir(my_cache_dir) # What files stored there?
+
 ```
 
 ## Geospatial Data in R
@@ -737,10 +760,22 @@ R `sf` objects include
 - a `CRS` (coordinate reference system), specified by
     - epsg(SRID) code
     - proj4string
+    
+## Census Data CRS
 
-## Map it
+All census geographic data use the `NAD83` CRS, or coordinate reference system.
 
-We can use `plot` to make a quick map the geometry...
+`NAD83` stands for North American Datum of 1983. The geographic coordinates are longitude and latitude values encoded as decimal degrees.
+
+`WGS84`, or [The World Geodetic System of 1984](https://en.wikipedia.org/wiki/World_Geodetic_System) is the most commonly used geographic CRS. The difference between points encoded in these two systems can vary, on average, up to 1 meter in the continental US.
+
+Many geospatial operations require you transform data to a common CRS before conducting spatial analysis or mapping.  
+
+As an in depth discussion of CRSs is outside the scope of this workshop, see [Geocomputation in R](https://geocompr.robinlovelace.net/reproj-geo-data.html) for more information.
+
+## Mapping sf Spatial Objects
+
+We can use `plot` to make a quick map the geometry stored in an `sf` spatial object.
 
 ```{r}
 plot(pop2010geo$geometry)
@@ -759,8 +794,8 @@ But Alaska includes a few islands that are between 180-172 degrees latitude.
 
 This makes it difficult to map the US centered at 0,0 lat/lon.
 
-```{r}
-plot(pop2010geo$geometry)
+```{r, echo=F}
+plot(pop2010geo$geometry) #view again
 ```
 
 ## Fetch geographic data with tidycensus, SHIFTED
@@ -785,8 +820,17 @@ plot(pop2010geo_shifted$geometry)
 ## Save it
 
 You can save `sf` data to a shapefile using `st_write`
+
 ```{r, eval=F}
 st_write(pop2010geo_shifted,"usa_2010_shifted.shp")
+```
+
+## Check your TIGRIS_CACHE_DIR to see it
+
+```{r, eval=F}
+my_cache_dir <- Sys.getenv('TIGRIS_CACHE_DIR') 
+
+dir(my_cache_dir) # What files stored there?
 ```
 
 ## Mapping Data Values
@@ -886,7 +930,7 @@ plot(alcc_pop10['value'])
 
 Fetch and map the percent of San Francicso properties by census tract that were coded as rented in the 2010 Census.
 
-Step 1 - indentify the variables for the
+To start, indentify the variables for the
 
 - total number of hounsing units 
 
@@ -916,7 +960,7 @@ plot(sf_pct_rented['pct'])
 
 You can use the tidycensus `get_acs` function to retrieve data for the ACS 5 year products, beginning with the 2005 - 2010 dataset. 
 
-The default end year is the most recent one in `tidycensus` which is **2016** as of Dec 6, 2018.
+The default end year in the current version of `tidycensus` (as of Dec 4, 2018)  is **2016** for the 2012-2016 ACS 5 year dataset.
 
 `get_acs` syntax and options are very similar to `get_decennial`. 
 
@@ -1001,7 +1045,7 @@ sf_poor2 <- subset(sf_poor, summary_est > 0)
 plot(sf_poor2['estimate'])
 ```
 
-## Calcuting percents
+## Calculating percents
 
 Let's calculate the percent below poverty by tract.
 
@@ -1120,6 +1164,7 @@ par(mfrow=c(1,1))
 
 ## Visualize differences with Tmap
 
+zoom in to explore, especially around the coastline.
 ```{r}
 tm_shape(sf_poor_tl) +
     tm_borders() +
@@ -1131,13 +1176,13 @@ tm_shape(sf_poor_cb) +
 
 ## Challenge
 
-TO BE ADDED....
+The ACS 2013-2017 5 year dataset was released Dec 6, 2018. Although the current version of `tidycensus` states that 2012-2016 is the latest ACS 5-year product, see if you can fetch & map the percent of people below poverty line in San Francisco using the 2013-2017 ACS 5-year data. 
 
 # Questions?
 
 ## Scaling Up Example
 
-Read in census variables of interest from a file
+In this example we show you how you can read in census variables of interest from a file into an R dataframe. You can then use that dataframe to fetch data for all those variables using `tidycensus`.
 
 ```{r}
 
@@ -1152,7 +1197,7 @@ my_cenvar_df
 Fetch the ACS data for these variables for the 9 county bay area
 
 ```{r}
-nine_counties <- c("001", "075", "013", "041", "055", "081", "085", "095", "097", "087")
+nine_counties <- c("001", "075", "013", "041", "055", "081", "085", "095", "097")
 bay9_data <-get_acs(geography = "tract", 
                        variables = my_cenvar_df$my_cen_vars, 
                        year=2016,
@@ -1164,38 +1209,36 @@ bay9_data
 ```
 
 ## Reformat Ouput
-(1) we only keep the columns of interest - including GEOID and geometry
-(2) each estimate variable is in its own column
+
+1. We only want to keep the estimate column for each variable of interest, plus the GEOID and geometry columns.
+
+2. We then want to make the data `wide` using the `spread` function. This will put each estimate variable is in its own column.
 ```{r}
 bay9_data2 <- bay9_data %>%
   select("GEOID", "variable", "estimate") %>%
   spread(key=variable, value=estimate)
+```
 
+## Take a look
+```{r}
 bay9_data2
 ```
 
 ## Rename the columns
 
-Use our dataframe of census variables to rename the columns so that they are self-describing.
+Use the dataframe of census variables to rename the columns so that they are self-describing.
 ```{r}
 colnames(bay9_data2)<-c("GEOID", my_cenvar_df$my_cen_var_names, "geometry")
+
+```
+
+## Take a look
+```{r}
 
 bay9_data2
 ```
 
 # Questions? 
- 
-# Next steps
-
-## ACS 5 Year
-
-Latest is 2012 - 2016
-
-2013 - 2017 release date is dec 8, 2018
-
-See: https://www.census.gov/programs-surveys/acs/news/data-releases/2017/release-schedule.html
-
-See when `tidycensus` package is updated....!!!
 
 ## References
 
@@ -1205,16 +1248,16 @@ See when `tidycensus` package is updated....!!!
 
 ## Related D-Lab Workshops
 
+- R Fundamentals
 - Geospatial Data in R, parts 1, 2, & 3
 - Web Maps in R with Leaflet
 - Geocoding & Mapping in R
-
 
 # Extras for Enthusiasts
 
 ## Fetching data for multiple years
 
-Requires variable name to be the same!
+This requires variable name to be the same across years!
 ```{r, eval=FALSE}
 # use purr::map_df to get data for multiple years (must have same vars!)
 pop90_10 <- map_df(c(1990, 2000, 2010), function(x) { 
