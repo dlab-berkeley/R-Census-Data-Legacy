@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Welcome! While we're waiting:
 
-* **Clone or download** the workshop files from: [https://github.com/dlab-geo/](https://github.com/dlab-geo/ )
+* **Clone or download** the workshop files from: [https://github.com/dlab-geo/rCensus_workshop](https://github.com/dlab-geo/rCensus_workshop)
     - If you downloaded the zipfile, **unzip it**.
     - Make a note of the folder in which the files reside. 
     
@@ -291,11 +291,9 @@ census_api_key(THE_BIG_LONG_ALPHANUMERIC_API_KEY_YOU_GOT_FROM_CENSUS)
 
 ## Set working directory
 
-Be sure to **Clone or downloaded** the workshop files from: [https://github.com/dlab-geo/](https://github.com/dlab-geo/ )
+Be sure to **Clone or downloaded & unzip** the workshop files from: [https://github.com/dlab-geo/rCensus_workshop](https://github.com/dlab-geo/rCensus_workshop)
 
-* unzip if needed
-
-THen, set your working directory this folder, e.g.,
+Then, set your working directory this folder, e.g.,
 
 * `setwd("~/Documents/Dlab/workshops/2019/rCensus_workshop")`
 
