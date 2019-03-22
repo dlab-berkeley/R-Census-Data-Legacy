@@ -1370,6 +1370,19 @@ tm_shape(sf_poor_cb) + tm_borders(col="red")
 
 # Questions?
 
+# Summary
+
+## Summary
+
+- `tidycensus` offers two key functions for fetching census tabular and geographic: **get_acs** and **get_decennial**
+
+- Using `tidycensus` to fetch the tabular data or both tabular and geographic data is IMOH way easier than any alternatives, **IF** you (1) know R, (2)know a bit about working with geographic data in R.
+
+- This approach is also scaleable if you want multiple census variables and geographies.
+
+- If you just want to fetcch the geographic data it may be easier to use the **tigris** package or download it directly from the census.
+
+
 ## References
 
 - [DataCamp](https://www.datacamp.com) course [Analyzing US Census Data in R!](https://www.datacamp.com/courses/analyzing-us-census-data-in-r)
