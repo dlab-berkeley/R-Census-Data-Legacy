@@ -260,6 +260,8 @@ library(tigris)
 library(sf)
 ```
 
+If you are getting errors try importing dplyr or reinstalling dplyr package as that has worked for some.
+
 ## Install any packages that you do not have on your computer
 
 Also install any dependancies.
