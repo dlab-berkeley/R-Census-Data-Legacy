@@ -836,7 +836,7 @@ head(pop2000_2010,3)
 Use `write.csv` to save a data frame to a `CSV` file.
 
 ```{r, eval=F}
-write.csv(pop2000_2010, file="pop2000_2010.csv", row.names = FALSE)
+write.csv(pop2000_2010, file="data_out/pop2000_2010.csv", row.names = FALSE)
 ```
 
 # Any QUESTIONS?
