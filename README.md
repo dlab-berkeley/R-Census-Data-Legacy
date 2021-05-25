@@ -1,6 +1,6 @@
 # Census Data in R
 
-This workshp provides an introduciton to working with census data using the `tidycensus` R packages. 
+This workshp provides an introduciton to working with census data in R using the `tidycensus` package. 
 
 ## Description
 
