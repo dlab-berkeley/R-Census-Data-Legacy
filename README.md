@@ -51,9 +51,11 @@ Get one now if you don’t have one yet here: (just takes a minute): https://api
 <img src ="https://dlab.berkeley.edu/sites/default/files/logo.png" width="60" height="80" align="left">
 </a>
 </div>
-
 <div style="display:inline-block;vertical-align:middle;align:left">
-    <div style="font-size:larger">D-Lab @ University of California - Berkeley</div>
-    <div>https://dlab.berkeley.edu<div>
-</div> 
-
+    <div style="font-size:larger">D-Lab @ University of California - Berkeley
+    </br>
+    <a href="https://dlab.berkeley.edu" target="_blank">https://dlab.berkeley.edu</a>
+    </br>
+    &nbsp;
+    </div>
+</div>
