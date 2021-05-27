@@ -46,8 +46,8 @@ The tidycensus package, and any R package that accesses the Census APIs, require
 Get one now if you don’t have one yet here: (just takes a minute): https://api.census.gov/data/key_signup.html
 
 ---
-<div style="display:inline-block;vertical-align:middle;">
-<a href="https://dlab.berkeley.edu/" target="_blank"><img style='background-color:pink !important;' src ="https://dlab.berkeley.edu/sites/default/files/logo.png" width="75" align="left">
+<div style="display:inline-block;vertical-align:middle;background-color:grey !important;">
+<a href="https://dlab.berkeley.edu/" target="_blank"><img src ="https://dlab.berkeley.edu/sites/default/files/logo.png" width="75" align="left">
 </a>
 </div>
 
