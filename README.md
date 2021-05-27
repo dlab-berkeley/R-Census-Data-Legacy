@@ -44,3 +44,16 @@ Here are the R packages you will need for this workshop:
 The tidycensus package, and any R package that accesses the Census APIs, requires you to first get a Census API key
 
 Get one now if you don’t have one yet here: (just takes a minute): https://api.census.gov/data/key_signup.html
+
+---
+<div style="display:inline-block;vertical-align:middle;">
+<a href="https://dlab.berkeley.edu/" target="_blank"><img src ="https://dlab.berkeley.edu/sites/default/files/logo.png" width="75" align="left">
+</a>
+</div>
+
+<div style="display:inline-block;vertical-align:middle;">
+    <div style="font-size:larger">&nbsp;D-Lab @ University of California - Berkeley</div>
+    <div>&nbsp;https://dlab.berkeley.edu<div>
+</div>
+      
+
