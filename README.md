@@ -52,7 +52,7 @@ Get one now if you don’t have one yet here: (just takes a minute): https://api
 </div>
 
 <div style="display:inline-block;vertical-align:middle;">
-    <div style="font-size:larger">&nbsp;D-Lab @ University of California - Berkeley</div>
+    <div style="font-size:larger; color:grey">&nbsp;D-Lab @ University of California - Berkeley</div>
     <div>&nbsp;https://dlab.berkeley.edu<div>
 </div>
       
