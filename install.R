@@ -1,4 +1,5 @@
 install.packages(c("tidyverse",
                    "tidycensus",
                    "sf",
-                   "mapview"))
+                   "mapview", 
+                  "tigris"))
