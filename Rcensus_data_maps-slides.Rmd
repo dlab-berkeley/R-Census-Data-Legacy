@@ -12,6 +12,15 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 
 ```
+*Almost everyone has a different file structure on their computer. 
+We've included the [`here()`](https://here.r-lib.org/) package to load local files in the workshop.
+Lookout for the `here()` function wrapping the file directory paths.*
+
+```{r}
+# install and load here() package
+if (!require("here")) install.packages("here")
+library(here)
+```
 
 # Getting Started
 
@@ -22,7 +31,8 @@ Welcome! While we're waiting:
 * **Clone or download** the workshop files from: [https://github.com/dlab-berkeley/rCensus_workshop](https://github.com/dlab-berkeley/rCensus_workshop)
     - If you downloaded the zipfile, **unzip it**.
     - Make a note of the folder in which the files reside. 
-    
+
+
     
 * Open **RStudio**
 
@@ -836,7 +846,7 @@ head(pop2000_2010,3)
 Use `write.csv` to save a data frame to a `CSV` file.
 
 ```{r, eval=F}
-write.csv(pop2000_2010, file="data_out/pop2000_2010.csv", row.names = FALSE)
+write.csv(pop2000_2010, file= here("data_out/pop2000_2010.csv"), row.names = FALSE)
 ```
 
 # Any QUESTIONS?
@@ -963,7 +973,7 @@ plot(pop2010geo_shifted$geometry)
 You can save any `sf` data object to a shapefile using `st_write`
 
 ```{r, eval=F}
-st_write(pop2010geo_shifted, "data_out/usa_pop2010_shifted.shp")
+st_write(pop2010geo_shifted, here("data_out/usa_pop2010_shifted.shp"))
 ```
 
 ## Check it out
@@ -971,7 +981,7 @@ st_write(pop2010geo_shifted, "data_out/usa_pop2010_shifted.shp")
 ```{r, eval=F}
 
 # Check to see if the data was written out to a shapefile
-dir("data_out") 
+dir(here("data_out"))
 ```
 
 ## Mapping Data Values
