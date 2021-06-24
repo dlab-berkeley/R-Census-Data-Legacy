@@ -31,10 +31,11 @@ Welcome! While we're waiting:
 * **Clone or download** the workshop files from: [https://github.com/dlab-berkeley/rCensus_workshop](https://github.com/dlab-berkeley/rCensus_workshop)
     - If you downloaded the zipfile, **unzip it**.
     - Make a note of the folder in which the files reside. 
+    - Click the "Census-data-in-R.Rproj" file to open R-studio.
 
 
     
-* Open **RStudio**
+* With **RStudio** open
 
 * Open a new **R script** file
 
