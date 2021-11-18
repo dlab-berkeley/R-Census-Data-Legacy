@@ -20,8 +20,7 @@ R experience equivalent to the D-Lab R Fundamentals workshop series is required 
 
 ### Tech Requirements:
 
-Bring a laptop with R, RStudio and the following R packages installed: `sp`, `sf`, `rgdal`, `rgeos`, `raster`, `ggplot2`, and `tmap`, `tigris`, and `tidycensus`.
-
+Bring a laptop with R, RStudio and the following R packages listed below installed.
 
 You can download the repo and work through the tutorial by following along with the slides:
 
