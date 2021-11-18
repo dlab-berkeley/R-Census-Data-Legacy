@@ -21,6 +21,8 @@ Welcome! While we're waiting:
 
 * Navigate to the workshop webpage: <https://github.com/dlab-berkeley/Census-Data-in-R>
 
+* Scroll down and read the `Readme` section.
+
 * **Clone or download** the workshop files by clicking on the green `CODE` button.
 
     - If you download the zipfile, **unzip it**.
@@ -39,7 +41,7 @@ Welcome! While we're waiting:
 
 ## Outline
 
-- Describe primary US Census data products
+- **Brief** overview of the primary US Census data products
 
 - Introduce R packages for working with census data
 
@@ -69,6 +71,8 @@ Available at <https://www.census.gov>
 
 Complete count of the population every 10 years since `1790` 
 
+A snapshot of the American population in time.
+
 Includes data on 
 
 - Population, by sex, age, race/ethnicity, and family / household relationships
@@ -85,7 +89,7 @@ From 1840 to 2000, additional questions were asked of a `sample` of the populati
 
 Since 2005, the `American Community Survey (ACS)` has replaced the decennial census sample data questions.
 
-- Annual survey of a sample of about 3.5 million households
+- Annual survey of a sample of about 3.5 million households conducted over a 1, 3 or 5 year period.
 
 - Provides `estimates` of demographic, social, economic, and housing characteristics
 
@@ -130,7 +134,8 @@ Not all data tables are available all geographies, e.g., only decennial census d
 
 ACS 1-year and 5-year products are currently available through 2019
 
-- New data is released at the end of the next year (2020 data on Dec 8, 2021)
+- New data is released at the end of the next year (e.g., 2020 data in Dec 2021)
+- But COVID is causing a [delay in the release dates](https://www.census.gov/programs-surveys/acs/news/data-releases/2020/release-schedule.html) 
 
 ACS 3-year no longer available (2008—2013)
 
@@ -275,3 +280,4 @@ Get one now if you don't have one yet!
 
  - (https://api.census.gov/data/key_signup.html)
 
+# Hands-on Tutorial Time!
