@@ -8,14 +8,14 @@ get_decennial(geography = "state",               # census tabulation unit
               year = 2010,           # census year
               state="CA")           # Filter by state is CA
 
-
+#---------------------------------------------------------------------
 ## fetch state pop in 2010 for CA, TX and FL
 get_decennial(geography = "state",               # census tabulation unit
               variables = "P001001", # variable(s) of interest
               year = 2010,           # census year
               state=c("CA","FL","TX")  )         # Filter by state is CA, Fl or Tx
 
-
+#---------------------------------------------------------------------
 ## fetch 2010 population for Alameda & San Francisco Counties
 get_decennial(geography = "county",              # census tabulation unit
               variables = "P001001", # variable(s) of interest
@@ -100,3 +100,8 @@ sf_medrent %>%
   geom_sf(color=NA) + 
   coord_sf(crs = 26910) +  # CRS for Northern CA - UTM 10 
   scale_fill_viridis_c(option = "magma") 
+
+#-----------------------------------------------------------
+
+#Use mapview to create a map of median household rent
+mapview(alcc_medrent, zcol='estimate')

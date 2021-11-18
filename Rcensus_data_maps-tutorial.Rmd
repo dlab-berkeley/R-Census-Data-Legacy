@@ -3,6 +3,8 @@ title: "Census Data Wrangling and Mapping in R - Tutorial"
 author: "Patty Frontiera"
 date: "11/17/2021"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -20,9 +22,7 @@ We will work through several exercises using `tidycensus` to fetch, wrangle, and
 
 Be sure to **clone or downloaded and unzip** the workshop files from: [https://github.com/dlab-berkeley/Census-Data-in-R](https://github.com/dlab-berkeley/Census-Data-in-R)
 
-Then set your working directory to the folder that contains the unzipped files.
-
-You can do this by:
+Then:
 
 1. Open the folder with the workshop files
 
@@ -36,7 +36,7 @@ You can do this by:
 
 ## Install packages
 
-Next, install any packages we will use that are not already installed on your system.
+Install any packages we will use that are not already installed on your system.
 
 - If you installed any of these awhile ago it's a good idea to install updates (though not during the workshop as things can break!)
 
@@ -67,15 +67,13 @@ if(length(new_packages) > 0) {
 
 Use the `library` function to load the R packages we will use today
 
-```{r, message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(tidycensus)
 library(tidyverse) 
-#library(tigris)
 library(sf)
 library(mapview)
 ```
 
-*If you are getting errors try loading the `dplyr` package or reinstalling it as that has worked for some.*
 
 ## Census API Key
 
@@ -112,7 +110,7 @@ Let's get started!
 
 1. Copy and paste your Census API key from your email
 
-1. Use the tidycensus function **census_api_key** to register your API key with tidycensus - **don't forget to put quotes around the key!**.
+2. Use the tidycensus function **census_api_key** to register your API key with tidycensus.  **Don't forget to put quotes around the key!**.
 
 ```{r, eval=F}
 # Install your census api key - long alphanumeric string
@@ -138,7 +136,7 @@ census_api_key(key = my_census_api_key)
 
 ## `get_decennial` function
 
-Let's start by fetching from the 2010 Census with tidycensus's `get_decennial` function.
+We will start by fetching from the 2010 Census with tidycensus's `get_decennial` function. Let's first talk about the code.
 
 ```{r}
 pop2010 <- get_decennial(geography = "state",   # census tabulation unit
@@ -188,7 +186,7 @@ Decennial census data is gathered from individuals and publicly distributed in a
 
 The Census tabulation units are the Census geographies to which the census data have been aggregated.
 
-Some of the most common geographic tabulation units and their tidycensus function abbreviations are shown below, along with **required** and available filters that limite what data are returned.
+Some of the most common geographic tabulation units and their tidycensus function abbreviations are shown below, along with **required** and available filters that limit what data are returned.
 
 |Geography    |Definition          |Filter(s)    |Used in tidycensus        |
 |-------------|--------------------|-------------|--------------------------|
@@ -209,6 +207,7 @@ Let's work together to fill in the code to fetch state population in 2010 just f
 
 ```{r, eval=F}
 #Fill in the code to fetch State population in 2010 just for California
+
 get_decennial(geography = "state",               # census tabulation unit
                           variables = "P001001", # variable(s) of interest
                           year = 2010,           # census year
@@ -273,13 +272,25 @@ Let's use it to visualize the population data.
 ## Plot 2010 Population by state
 
 Use `ggplot2` to create an ordered horizontal bar chart.
+
 ```{r}
-pop_plot<- ggplot(data=pop2010, aes(x=reorder(NAME,value), y=value/1000000)) + 
-  geom_bar(stat="identity") + coord_flip() +
-  theme_minimal() + 
-  labs(title = "2010 US Population by State") +
-  xlab("State") +
-  ylab("in millions")
+pop_plot <- ggplot(data=pop2010, 
+                  aes(x=value, y=reorder(NAME,value)) ) + 
+                  geom_point()
+
+# display the plot
+pop_plot
+```
+
+# If you know ggplot you can get real fancy
+```{r}
+pop_plot <- ggplot(data=pop2010, 
+                   aes(x=value/1000000, y=reorder(NAME,value)) ) + 
+                   geom_bar(stat="identity") +  
+                   theme_minimal() + 
+                   labs(title = "2010 US Population by State") +
+                   xlab("State") +
+                   ylab("in millions")
 
 # display the plot
 pop_plot
@@ -299,8 +310,8 @@ We can use the tidycensus **load_variables** function for this.
 Use `load_variables` to fetch all variables used in the 2010 census into a dataframe.
 ```{r}
 vars2010 <- load_variables(year=2010,        # Year or end year for ACS-5yr
-                           dataset = 'sf1',  # 'sf1' for decennial or 'acs5', etc
-                           cache = TRUE)     # Whether to save fetched data locally
+                           dataset = 'sf1',  # 'sf1' for decennial census
+                           cache = TRUE)     # Save fetched data locally
 
 # How large is the output
 dim(vars2010)
@@ -342,7 +353,7 @@ What 2010 decennial census variable contains...
 
 ## Challenge
 
-Complete the code cell below (...) to fetch and plot `Avg Family Size` by CA County in `2010`.
+Complete the code cell below (...) to fetch and plot `Avg Family Size` by CA County in `2010`. *See Solutions.R for the code.*
 
 ```{r, eval=F}
 # Fetch Avg family size by CA County
@@ -383,10 +394,10 @@ Let's fetch population data for the census tabulation unit to *tract*
 
 Fetch total population for California by census tract
 
-```{r, eval=F}
+```{r}
 ## Fetch population by **tract** for California.
-ca_tract_pop2010 <- get_decennial(geography = "tract",   # census tabulation unit
-                                   variables = "P001001", # variables of interest
+ca_tract_pop2010 <- get_decennial(geography = "tract",   # census tab unit
+                                   variables = "P001001", # var of interest
                                    year = 2010,           # census year
                                    state='CA')      # State filter
 
@@ -399,18 +410,19 @@ head(ca_tract_pop2010)
 
 ## Fetching Census Tract Data
 
-If you want census data at the tract level or below you **must** specifiy the state(s)
+Census tract data can be quite large!
 
-- You can also specify one or more counties
+Fortunately, you can also limit the results to one or more counties.
+
 ```{r,}
 tract_pop2010 <- get_decennial(geography = "tract",   # census tabulation unit
                          variables = "P001001",       # variable of interest
                          year = 2010,                 # census year - only one!
                          state="CA",                  # limit to California
-                         county=c("Alameda","Contra Costa"))  # & these counties
+                         county=c("Alameda","Contra Costa"))  # & counties
+
+dim(tract_pop2010)
 ```
-
-
 
 
 ## Fetching data for more than one census variable
@@ -458,13 +470,8 @@ The `summary_value` column comes in handy when you want to compute percent of to
 ur_pop10 <- ur_pop10 %>%
             mutate(pct = 100 * (value / summary_value))
 
-```
-
-## Calculating Percents
-
-Let's take a look at the output.
-```{r}
-ur_pop10 # Take a look
+# Take a look at the output.
+ur_pop10 
 ```
 
 ## Plot it
@@ -483,10 +490,10 @@ myplot <- ggplot(data = ur_pop10,
 
 # plot it
 myplot
-
 ```
-*Don't worry if you don't get all the ggplot code now. It's here for reference.*
+Don't worry if you don't get all the ggplot code now. It's here for reference. 
 
+- You may want to check out our *R Data Visualization with ggplot* workshop!
 
 
 ## Data Wrangling
@@ -522,7 +529,7 @@ head(state_pop)
 
 ## Mapping Census Data with `tidycensus`
 
-You can fetch geographic data by adding the parameter **geometry=TRUE** to `tidycensus` functions
+You can fetch census geographic data by adding the parameter **geometry=TRUE** to `tidycensus` functions
 
 - Under the hood, tidycensus calls the `tigris` package to fetch data from the Census Geographic Data APIs.
 
@@ -534,7 +541,7 @@ You can then use your favorite R mapping functions or libraries like `plot`, `gg
 
 Before fetching census geographic data, we need to set the option `tigris_use_cache` to TRUE
 
-Caching greatly speeds things up if you fetch the same census geographic data repeatedly.
+Caching saves data locally. This greatly speeds things up if you fetch the same census geographic data repeatedly.
 
 ```{r}
 # Tigris options - used by tidycensus
@@ -552,7 +559,7 @@ pop2010geo <- get_decennial(geography = "state",
                           variables = c(pop10="P001001"), 
                           year = 2010, 
                           output="wide", 
-                          geometry=TRUE) # Fetch geometry with the data for mapping
+                          geometry=TRUE) # Fetch geometry data for mapping
  
 ```
 
@@ -566,7 +573,9 @@ head(pop2010geo, 3)
 
 ## Geospatial Data in R
 
-R `sf` objects include
+The `tidycensus` package uses the R `sf` package to manage geospatial data.
+
+R `sf` objects include:
 
 - a dataframe with a `geometry` column with the name  `geometry`
 
@@ -579,50 +588,39 @@ R `sf` objects include
     
 For a deeper understanding of the `sf` package and its functionality, we recommend 
 
-- our [Geospatial-Fundamentals-in-R-with-sf](https://github.com/dlab-berkeley/Geospatial-Fundamentals-in-R-with-sf) workshop
+- our [R-Geospatial-Fundamentals](https://github.com/dlab-berkeley/R-Geospatial-Fundamentals) workshop
 
 - the [Geocomputation with R ebook](https://geocompr.robinlovelace.net/)
     
 ## Census Data Coordinate Reference System (CRS)
 
-All census geographic data use the `NAD83` CRS, or coordinate reference system. `NAD83` stands for North American Datum of 1983. The geographic coordinates are longitude and latitude values encoded as decimal degrees.
+All geospatial data are referenced to the surface of the earth with a CRS, or coordinate reference system.  Anyone working with geospatial data will need to develop an understanding of CRSs.
 
-`WGS84`, or [The World Geodetic System of 1984](https://en.wikipedia.org/wiki/World_Geodetic_System) is the most commonly used geographic CRS. The difference between point locations on the surface of the earth in these two systems can vary up to 1 meter in continental US.
+Fortunately, many of us are familiar with longitude and latitude, which are geographic coordinates. But there are different versions of geographic CRSs. And there are also projected CRSs which transform longitude and latitude to 2 dimensional surface for mapping & analysis.
+
+All census geographic data use the `NAD83` geographic CRS. `NAD83` stands for North American Datum of 1983. This CRS is best for locations in North America.
 
 Many geospatial operations require you transform data to a common CRS before conducting spatial analysis or mapping.  
 
-- This could be an issue if you try to combine the census geospatial data with other geospatial data.
+- This could be an issue if you try to combine the census geospatial data with other geospatial data. But it is not an issue in this tutorial.
 
 An in-depth discussion of CRSs is outside the scope of this workshop. See [Geocomputation in R](https://geocompr.robinlovelace.net/reproj-geo-data.html) for more information.
 
 ## Mapping `sf` Spatial Objects
 
-We can use `plot` to make a quick map the geometry stored in an `sf` spatial object.
+We can use `sf::plot` to make a quick map the geometry stored in an `sf` spatial object.
 
 ```{r}
+# plot the geometry column data
 plot(pop2010geo$geometry)
 ```
 
-## Question
-
-What do you get if you plot the `sf` object without specifying "$geometry"
-
-Try it!
-```{r, eval=F}
-plot(pop2010geo)
-```
 
 ## The Challenge of US maps
 
 The vast geographic extent and non-contiguous nature of the USA makes it difficult to map.
 
-```{r, echo=F}
-plot(pop2010geo$geometry) #view again
-```
-
-## Fetch Geographic Data with `tidycensus`, SHIFTED
-
-tidycensus includes a `shift_geo` parameter to shift AK & HI to below Texas.
+Fortunately, tidycensus includes a `shift_geo` parameter to shift AK & HI to below Texas.
 ```{r}
 
 pop2010geo_shifted <- get_decennial(geography = "state", 
@@ -632,10 +630,7 @@ pop2010geo_shifted <- get_decennial(geography = "state",
                                     geometry=TRUE, 
                                     shift_geo=TRUE)
 
-```
-
 ## Shift Happens!
-```{r}
 plot(pop2010geo_shifted$geometry)
 ```
 
@@ -660,10 +655,14 @@ dir("data_out")
 You can use the sf `plot` command to make a map that sets the color of the geometry by the data values 
 
 ```{r}
-plot(pop2010geo_shifted['pop10'])  # a choropleth map!
+# Name the column with the variable values to make
+# a thematic map, also called a choropleth map.
+plot(pop2010geo_shifted['pop10'])  
 ```
 
 ## `ggplot2` Map
+
+ggplot knows what to do with sf objects!
 
 ```{r}
 ggplot(pop2010geo_shifted, aes(fill = pop10)) + 
@@ -705,7 +704,7 @@ We can fetch Census data and the **geometry** for more than one state or county 
 
 Let's try it with Census Tracts!
 
-Fetch tract population and geometry data for Alameda and Contra Costa Counties.
+Fetch tract population and geometry data for Bay Area Counties.
 
 ```{r}
 bay_counties <- c("Alameda", "Contra Costa", "Marin", "San Francisco",
@@ -718,9 +717,6 @@ bayarea_pop10 <- get_decennial(geography = "tract",
                       county=bay_counties,
                       geometry=T)
 
-# take a look
-head(bayarea_pop10)
-
 # Quick map
 plot(bayarea_pop10['value'])
 ```
@@ -730,6 +726,8 @@ plot(bayarea_pop10['value'])
 # Part 3. ACS 5-year data
 
 ## ACS Data with `get_acs`
+
+ACS data contains the most recent information about the American population.
 
 We can use the tidycensus function  `get_acs` to retrieve `ACS data` using code very similar to `get_decennial`.
 
@@ -755,10 +753,8 @@ Let's use the `load_variables` function to get a dataframe of all variables from
 
 - Then, find the variable name for `median household income`.
 
-> The 2016-2020 American Community Survey 5-year estimates are scheduled to be released on Thursday, December 9, 2021.
-
 ```{r}
-vars_acs2019 <- load_variables(year=2019, # the end year of the 2016-2020 period
+vars_acs2019 <- load_variables(year=2019,      # end year 2016-2020 period
                               dataset = 'acs5', # the ACS data product
                               cache = T) # Save locally for future access
 
@@ -839,7 +835,7 @@ medhhinc_facet_map
 
 ## Challenge
 
-Make a ggplot map of MEDIAN GROSS RENT in San Francisc County by tract
+Make a ggplot map of MEDIAN GROSS RENT in San Francisco County by tract
 using data from the ACS 2015—2019 5-year product.
 ```{r, eval=F}
 # Fill in the code to fetch the data - (Solutions.R has the code)
@@ -888,11 +884,12 @@ mapview(alco_mhhincome, zcol="estimate")
 
 ## Challenge
 
-Use `mapview` to create a map of median household income (`alcc_medrent`).
+Use `mapview` to create an interactive choropleth map of median household rent.
 
-## Challenge Solution
 ```{r, eval=F}
-mapview(alcc_medrent, zcol='estimate')
+#Use mapview to create a map of median household income (`alcc_medrent`).
+# Your code here - See Solutions.R for code.
+
 ```
 
 # Any Questions?
@@ -922,7 +919,7 @@ Math is needed to combine MOEs when you combine variables.
 
 `tidycensus` offers two key functions for fetching census tabular and geographic: **get_acs** and **get_decennial**.  
 
-- The `load_variables` function helps identify the names of census variables of interest.
+- The **load_variables** function helps identify the names of census variables of interest.
 
 Support for fetching `population estimates` and `migration flow` census data was recently added to tidycensus. You can read up on it on the [tidycensus documentation website](https://walker-data.com/tidycensus/articles/other-datasets.html)
 
@@ -952,6 +949,8 @@ Great online resource for working with spatial data in R
 - [Geocomputation with R](https://geocompr.robinlovelace.net/)
 
 
+---
+
 # Appendix
 
 ## A More Complex Query
@@ -977,7 +976,7 @@ sf_rented <- get_decennial(geography =  ,  # census tabulation unit
 
 ##  and here it is SF Percent Rented Units, 2010 
 
-```{r}
+```{r, eval=F}
 sf_rented <- get_decennial(geography = "tract",  # census tabulation unit
                            variables =  "H004004", #number of households rented
                            year = 2010, 
@@ -993,7 +992,7 @@ head(sf_rented)
 
 ## Calculate Percent Rented
 
-```{r}
+```{r, eval=F}
 sf_pct_rented <- sf_rented[sf_rented$value > 0,] %>%
                  mutate(pct = 100 * (value / summary_value))
 
@@ -1003,6 +1002,6 @@ head(sf_pct_rented)
 ```
 
 ## Map the result
-```{r}
+```{r, eval=F}
 plot(sf_pct_rented['pct'])
 ```

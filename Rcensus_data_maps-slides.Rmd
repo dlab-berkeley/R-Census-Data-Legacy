@@ -281,3 +281,19 @@ Get one now if you don't have one yet!
  - (https://api.census.gov/data/key_signup.html)
 
 # Hands-on Tutorial Time!
+
+## Setup
+
+**Clone or downloaded and unzip** the workshop files from: [https://github.com/dlab-berkeley/Census-Data-in-R](https://github.com/dlab-berkeley/Census-Data-in-R)
+
+Then:
+
+1. Open the folder with the workshop files
+
+2. Double-click on the R Project file `Census-Data-in-R.Rproj`
+
+3. This should open RStudio - with the `Files` panel displaying the workshop folder contents.
+
+4. Double-click on the file `Rcensus_data_maps-tutorial.Rmd` to follow along!
+
+*You can also open the file `Rcensus_data_maps-tutorial.html` in the RStudio Files tab to follow along in a web brower.*
