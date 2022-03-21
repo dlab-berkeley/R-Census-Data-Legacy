@@ -264,7 +264,7 @@ The **tidyverse** package is an umbrella package that installs all the core tidy
     
 `sf` is loaded and used automatically by `tidycensus`.
 
-The online book [Geocomputation with R](https://geocompr.robinlovelace.net/) is a great resourve for learning about the `sf` package and working with geospatial data in R.
+The online book [Geocomputation with R](https://geocompr.robinlovelace.net/) is a great resource for learning about the `sf` package and working with geospatial data in R.
 
 ## [mapview](https://r-spatial.github.io/mapview/)
 
