@@ -149,7 +149,7 @@ head(pop2010)
 
 ## tidycensus data is `tidy`
 
-By default, tidycensus returns data in a `tidy`, or `long` format that allows data for multiple variables to be contained within the `variable` and `value` columns. This is in contract to untidy, or `wide` data where each variable is in its own column. 
+By default, tidycensus returns data in a `tidy`, or `long` format that allows data for multiple variables to be contained within the `variable` and `value` columns. This is in contrast to untidy, or `wide` data where each variable is in its own column. 
 
 tidycensus can return long data if you can add the parameter `output=wide` to the function call.
   
@@ -749,7 +749,7 @@ The ACS has two primary data products - the ACS 1 year database and the 5 year d
 
 ## Fetch List of ACS 5-Year Variables
 
-Let's use the `load_variables` function to get a dataframe of all variables from the ACS 2016—2020 5-year dataset.
+Let's use the `load_variables` function to get a dataframe of all variables from the ACS 2015—2019 5-year dataset.
 
 - Then, find the variable name for `median household income`.
 
@@ -835,7 +835,7 @@ medhhinc_facet_map
 
 ## Challenge
 
-Make a ggplot map of MEDIAN GROSS RENT in San Francisco County by tract
+Make a ggplot map of MEDIAN GROSS RENT (DOLLARS) in San Francisco County by tract
 using data from the ACS 2015—2019 5-year product.
 ```{r, eval=F}
 # Fill in the code to fetch the data - (Solutions.R has the code)
@@ -858,7 +858,7 @@ alcc_medrent <- get_acs(geography= ,
 
 Interactive mapping gives the RStudio environment some of the functionality of desktop GIS.
 
-There are a number of R packages tat you can use, including:
+There are a number of R packages that you can use, including:
 
 - [mapview](https://r-spatial.github.io/mapview/): quick interactive exploratory data viewing
   
