@@ -36,6 +36,7 @@ Here are the R packages you will need for this workshop:
 - `tidycensus` 
 - `tigris`
 - `mapview`
+- `leaflet`
 
 ## Is R not working on your laptop? 
 
