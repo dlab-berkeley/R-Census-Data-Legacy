@@ -37,6 +37,10 @@ Here are the R packages you will need for this workshop:
 - `tigris`
 - `mapview`
 
+## Is R not working on your laptop? 
+
+If you have a Berkeley CalNet ID, you can run these lessons on UC Berkeley's DataHub by clicking [![Datauhb](https://img.shields.io/badge/launch-datahub-blue)](https://datahub.berkeley.edu/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2FAverysaurus%2FCensus-Data-in-R-1&urlpath=rstudio%2F&branch=master). By using this link, you can save your work and come back to it at any time. When you want to return to your saved work, just go straight to DataHub (https://datahub.berkeley.edu), sign in, and you click on the `Census-Data-in-R` folder.
+
 
 ## Requesting a Census API key
 
