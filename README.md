@@ -39,6 +39,8 @@ Here are the R packages you will need for this workshop:
 
 If you have a Berkeley CalNet ID, you can run these lessons on UC Berkeley's DataHub by clicking [![Datauhb](https://img.shields.io/badge/launch-datahub-blue)](https://datahub.berkeley.edu/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2FAverysaurus%2FCensus-Data-in-R-1&urlpath=rstudio%2F&branch=master). By using this link, you can save your work and come back to it at any time. When you want to return to your saved work, just go straight to DataHub (https://datahub.berkeley.edu), sign in, and you click on the `Census-Data-in-R` folder.
 
+If you don't have a CalNet ID, you are able to access the workshop by clicking [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Averysaurus/Census-Data-in-R/HEAD?urlpath=rstudio). This link takes a moment to load, so patience is required! 
+
 
 ## Requesting a Census API key
 
