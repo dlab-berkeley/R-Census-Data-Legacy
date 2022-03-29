@@ -38,20 +38,20 @@ Then:
 
 ```{r}
 
-# install pacman for package management.
-if (!require("pacman")) install.packages("pacman")
+# Uncomment this to install packages, if necessary.
+# install.packages(c("here", "tidyverse", "sf", "leaflet", "mapview", "tigris", "tidycensus"))
 
-pacman::p_load(
-  here, # local directory management 
-  tidyverse, # data wrangling
-  sf,  # geospatial data management
-  leaflet, mapview, # mapping
-  tigris, tidycensus  # census data 
-)
+library(here)
+library(tidyverse)
+library(sf)
+library(leaflet)
+library(mapview)
+library(tigris)
+library(tidycensus)
 
 ```
 
-These six libraries should be loaded in your environment now. 
+These seven libraries should be loaded in your environment now. 
 
 ```{r}
 
