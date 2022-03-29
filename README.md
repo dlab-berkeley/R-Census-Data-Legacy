@@ -47,6 +47,27 @@ If you have a Berkeley CalNet ID, you can run these lessons on UC Berkeley's Dat
 
 The `tidycensus` package, and any R package that accesses the Census APIs, require you to first get a Census API key. Get one now if you don’t have one yet here: (just takes a minute): https://api.census.gov/data/key_signup.html
 
+
+## Going Further with Geospatial Analysis
+
+This workshop in mainly about using R to access US Census data in dynamic and efficient ways. We also explore data-centric mapping techniques to explore our queries over space. Is geospatial topics interest you and you'd like to study more, we recommed these resources as good starting points: 
+
+
+* [Geospatial Fundamentals in R](https://github.com/dlab-berkeley/R-Geospatial-Fundamentals) - D-Lab workshop which focused on mapping in R.
+
+* [Leaflet for R](https://rstudio.github.io/leaflet/) - Well written introduciton to mapping with the `leaflet` package in R. 
+
+* [Geocomputation in R](https://geocompr.robinlovelace.net/) - Textbook (Lovelace, Nowosad, and Muenchow, 2019) is an excellent resource for getting up and running.
+
+* [R Shiny Tutorials](https://shiny.rstudio.com/tutorial/) - `shiny` is an R package that makes it easy to build interactive web apps straight from R, incuding maps! 
+
+
+## Contributors
+* Patty Frontiera
+* Irene Farah
+* [Avery Richards](https://github.com/Averysaurus)
+
+
 ---
 <div style="display:inline-block;vertical-align:middle;">
 <a href="https://dlab.berkeley.edu/" target="_blank">
