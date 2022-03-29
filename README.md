@@ -22,9 +22,6 @@ R experience equivalent to the D-Lab R Fundamentals workshop series is required 
 
 Bring a laptop with R, RStudio and the following R packages listed below installed.
 
-You can download the repo and work through the tutorial by following along with the slides:
-
- - https://dlab-berkeley.github.io/Census-Data-in-R/Rcensus_data_maps-slides.html#1
 
 ## R Packages to install
 
