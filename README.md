@@ -53,7 +53,7 @@ The `tidycensus` package, and any R package that accesses the Census APIs, requi
 This workshop in mainly about using R to access US Census data in dynamic and efficient ways. We also explore data-centric mapping techniques to explore our queries over space. Is geospatial topics interest you and you'd like to study more, we recommed these resources as good starting points: 
 
 
-* [Geospatial Fundamentals in R](https://github.com/dlab-berkeley/R-Geospatial-Fundamentals) - D-Lab workshop which focused on mapping in R.
+* [Geospatial Fundamentals in R](https://github.com/dlab-berkeley/R-Geospatial-Fundamentals) - D-Lab workshop focusing on mapping and geospatial analysis in R.
 
 * [Leaflet for R](https://rstudio.github.io/leaflet/) - Well written introduciton to mapping with the `leaflet` package in R. 
 
