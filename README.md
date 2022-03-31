@@ -4,7 +4,7 @@ This workshop provides an introduction to working with census data in R using th
 
 ## Description
 
-Since 1790, the US Census has been THE source of data about American people, providing valuable insights to social scientists and humanists. Mapping these data by census geographies adds more value by allowing researchers to explore spatial trends and outliers. This workshop will introduce three key packages for streamlining census data workflows in R: `tigris`, `tidycensus`, and `tmap`. Participants will learn how to download census tabular data for one or more geographic aggregation units or years, download the associated census geographic data, and then join these data for analysis and mapping. 
+Since 1790, the US Census has been THE source of data about American people, providing valuable insights to social scientists and humanists. Mapping these data by census geographies adds more value by allowing researchers to explore spatial trends and outliers. This workshop will introduce `tidycensus`, an important and powerful R package for streamlining census data workflows. Participants will learn how to download census tabular data for one or more geographic tabulation units and/or years, download the associated census geographic data, and use these data for analysis and mapping. 
 
 Specifically, we will:
 
