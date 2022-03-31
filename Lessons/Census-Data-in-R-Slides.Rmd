@@ -53,12 +53,11 @@ Welcome! While we're waiting:
 
 # Census Data Overview
 
-## US Census Bureau 
+## US Census Bureau
+
 The "nation's leading provider of quality data about its people and economy."
 
-<img src="../data/census_page.png" width="700px"/></img>
-- <https://www.census.gov>
-
+<img src="../data/census_page.png" width="700px"/></img> - <https://www.census.gov>
 
 ## Primary Census Products
 
@@ -105,12 +104,11 @@ ACS 1-year and 5-year estimates are currently available through 2020
 
 See: [Census ACS: Guidance for Data Users](https://www.census.gov/programs-surveys/acs/guidance.html)
 
-
 ## [ACS Period Estimates](https://www.census.gov/programs-surveys/decennial-census/decade/2020/news/blog-posts.html)
 
 The `ACS 1 year estimates` include data from a sample of the population collected over a one year period.
 
-Five years of data are pooled together, weighted and processed as a whole dataset to create the `ACS 5 year estimates`. 
+Five years of data are pooled together, weighted and processed as a whole dataset to create the `ACS 5 year estimates`.
 
 Use the `ACS 1 year estimates` when you want the `most current data` and are less concerned about precision (larger margins of error). However, the ACS 1 year estimates are only available for areas with large populations (+65,000) and for a subset of data tables.
 
@@ -118,18 +116,18 @@ Use the `ACS 5 year estimates` when you want `more stability in the estimates`, 
 
 ## 
 
-| Demographic\*   | Social            | Economic          | Housing           |
-|-----------------|-------------------|-------------------|-------------------|
-| Sex             | Families          | Income            | Tenure\*          |
-| Age             | Education         | Benefits          | Occupancy\*       |
-| Race            | Marital Status    | Employment Status | Group quarters\*  |
-| Hispanic Origin | Fertility         | Occupation        | Housing Value     |
-| Relationships   | Grandparents      | Industry          | Taxes & Insurance |
-|                 | Veterans          | Commuting         | Utilities         |
-|                 | Disability Status | Place of Work     | Mortgage          |
-|                 | Language at Home  | Health Insurance  | Monthly Rent      |
-|                 | Citizenship       |                   | Structure Type    |
-|*\*decennial census*| Mobility          |                   |                   |
+| Demographic\*        | Social            | Economic          | Housing           |
+|------------------|------------------|------------------|------------------|
+| Sex                  | Families          | Income            | Tenure\*          |
+| Age                  | Education         | Benefits          | Occupancy\*       |
+| Race                 | Marital Status    | Employment Status | Group quarters\*  |
+| Hispanic Origin      | Fertility         | Occupation        | Housing Value     |
+| Relationships        | Grandparents      | Industry          | Taxes & Insurance |
+|                      | Veterans          | Commuting         | Utilities         |
+|                      | Disability Status | Place of Work     | Mortgage          |
+|                      | Language at Home  | Health Insurance  | Monthly Rent      |
+|                      | Citizenship       |                   | Structure Type    |
+| *\*decennial census* | Mobility          |                   |                   |
 
 ## Census Geographies
 
@@ -150,8 +148,6 @@ Not all census data is available for all geographic tabulation units. For exampl
 ## Census Data and Census Geographies
 
 <img src="../data/census_data_by_prod_geo.png" width="1000px"/></img>
-
-
 
 ## Census Data Workflow
 
@@ -233,7 +229,6 @@ Check out his website(<https://walker-data.com/>) to keep abreast of his great p
 
 And his new ebook [Analyzing the US Census with R](https://walker-data.com/census-r/), currently available to read online.
 
-
 ## [tidycensus tutorials](https://walker-data.com/tidycensus/articles/basic-usage.html)
 
 <img src="../data/tidycensus_articles.png"/></img>
@@ -250,7 +245,6 @@ The **tidyverse** package is an umbrella package that installs all the core tidy
 -   `tibble`, for tibbles, a modern re-imagining of data frames
 -   `stringr`, for strings
 -   `forcats`, for factors
-
 
 ## [sf](https://r-spatial.github.io/sf/) package
 
@@ -291,6 +285,6 @@ Then:
 
 3.  This should open RStudio - with the `Files` panel displaying the workshop folder contents.
 
-4.  Double-click on the file `Rcensus_data_maps-tutorial.Rmd` to follow along!
+4.  Double-click on the file `Census-Data-in-R.Rmd` in the `Lessons` folder to follow along!
 
-*You can also open the file `Rcensus_data_maps-tutorial.html` in the RStudio Files tab to follow along in a web brower.*
+- You can also open the file `Census-Data-in-R.html` to follow along in a web brower.
