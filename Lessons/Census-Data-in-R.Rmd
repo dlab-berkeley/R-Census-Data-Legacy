@@ -1,7 +1,7 @@
 ---
 title: "Census Data Wrangling and Mapping in R - Tutorial"
 author: "Patty Frontiera"
-date: "11/17/2021"
+date: "04/01/2022"
 output: 
   html_document: 
     toc: yes
@@ -27,9 +27,9 @@ Then:
 
 3. This should open RStudio - with the `Files` panel displaying the workshop folder contents.
 
-4. Double-click on the file `Rcensus_data_maps-tutorial.Rmd` to follow along!
+4. Double-click on the file `Census-Data-in-R.Rmd` to follow along!
 
-*You can also click on the file `Rcensus_data_maps-tutorial.html` in the Files tab to open the workshop tutorial in a web brower.*
+*You can also click on the file `Census-Data-in-R.html` in the Files tab to open the workshop tutorial in a web brower.*
 
 ### Install packages
 
@@ -829,7 +829,7 @@ medhhinc_facet_map <- alco_mhhinc_by_race %>%
 
 # Display the map
 medhhinc_facet_map
-<<<<<<< HEAD:Rcensus_data_maps-tutorial.Rmd
+#
 ```
 
 ## Challenge
