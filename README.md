@@ -63,16 +63,14 @@ This workshop in mainly about using R to access US Census data in dynamic and ef
 
 ## Contributors
 * Patty Frontiera
+* Drew Hart
+* Hikari Murayama
+* Katherine Wolf
 * Irene Farah
 * [Avery Richards](https://github.com/Averysaurus)
 
 
 ---
-<div style="display:inline-block;vertical-align:middle;">
-<a href="https://dlab.berkeley.edu/" target="_blank">
-<img src ="https://dlab.berkeley.edu/sites/default/files/logo.png" width="60" align="left" border=0 style="border:0; text-decoration:none; outline:none">
-</a>
-</div>
 <div style="display:inline-block;vertical-align:middle;align:left">
     <div style="font-size:larger">D-Lab @ University of California - Berkeley
     </br>
