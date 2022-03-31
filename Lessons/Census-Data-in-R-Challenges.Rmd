@@ -1,0 +1,166 @@
+---
+title: "R-Census-Data-Maps-Challenges.Rmd"
+author: "Avery Richards"
+date: "3/21/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+# install pacman for package management.
+if (!require("pacman")) install.packages("pacman")
+
+pacman::p_load(
+  here, # locate files 
+  tidyverse, # data wrangling
+  sf,  # geospatial data management
+  leaflet, # interactive mapping
+  tigris, tidycensus  # census data 
+)
+
+```
+
+These six libraries should be loaded in your environment now. 
+
+```{r}
+
+# If you run this chunk, output from the "here" function should be visible below. This is your local directory path. We can use this to import files later on. 
+here()
+
+```
+
+*Solutions are available in the Solutions folder, as needed.* 
+
+### Challenge 1
+
+> Use the `get_decennial` function like we've seen above, but fill in the code arguments to fetch State population in 2010 just for California. 
+
+```{r, challenge_1_code_A }
+
+# add your code here. 
+
+        
+```
+
+Alter the above code to fetch state pop in 2010 for CA, TX and FL
+```{r, challenge_1_code_B }
+
+# add your code here. 
+
+```
+
+
+
+### Challenge 2
+
+> You can also filter tidycensus results by `county`. Alter the code above to fetch 2010 population for Alameda & San Francisco Counties.
+
+
+```{r}
+
+get_decennial(geography = "county",              # census tabulation unit
+                          variables = "P001001", # variable(s) of interest
+                          year = 2010,           # census year
+                          state='CA',            # Filter by state is CA
+                          county='Alameda')      # Filter by county Alameda
+```
+
+
+
+```{r}
+
+# add your code here. 
+
+```
+
+
+## Challenge 3
+
+> Use the `get_decennial` function to fetch and plot an `Avg Family Size`varaible by CA County in `2010`, and name the call as a dataframe, `ca_fam_size`. Once you've done that, plot the dataframe with the `ggplot`call below. __Hint: "P037001"__ 
+
+```{r, challenge_3A}
+
+# add you code here to create a ca_fam_size dataframe with get_decennial.
+
+```
+
+
+
+```{r, challenge_3B}
+
+# uncomment and plot from the ca_fam_size dataframe.
+# ca_fam_size %>%
+#   ggplot(aes(x = value, 
+#              y = reorder(NAME, value))) + 
+#       geom_point()
+
+```
+
+## Challenge 4
+
+> Repeat the previous challenge with data from the `2000` decennial census. Don't assume variable names are the same across the 2000 and 2010 census
+
+- Use `load_variables` to check!
+
+
+```{r, challenge_4}
+# Add your code below
+
+
+```
+
+
+## Challenge 5
+
+Create a `map` of CA Median Age by county in 2010. 
+
+```{r, challenge_5A}
+
+# Add your code to fetch the data for the map. 
+
+```
+
+
+```{r, challenge_5B}
+
+# Map the data with the plot function
+
+
+```
+
+
+```{r, challenge_5C}
+
+# Map the data with ggplot, setting the CRS to 3310 (CA Albers), the preferred default CRS for statewide maps of CA.
+
+```
+
+
+## Challenge 6
+
+> Make a ggplot map of MEDIAN GROSS RENT in San Francisco County by tract
+using data from the ACS 2015—2019 5-year product. 
+
+
+```{r, challenge_6}
+
+# Add your code here.
+
+```
+
+## Challenge 7
+
+>Use `mapview` to create an interactive choropleth map of median household rent.
+
+```{r, challenge_7}
+
+#Use mapview to create a map of median household income (`alcc_medrent`).
+# Your code here - See Solutions.R for code.
+
+```
+
+*Check Solutions.Rmd for answers, as needed.* 
