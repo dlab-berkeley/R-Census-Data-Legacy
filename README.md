@@ -65,10 +65,11 @@ This workshop in mainly about using R to access US Census data in dynamic and ef
 * Patty Frontiera
 * Drew Hart
 * Hikari Murayama
+* Brooks Jessup
 * Katherine Wolf
+* Amy Van Scoyoc
 * Irene Farah
 * [Avery Richards](https://github.com/Averysaurus)
-
 
 ---
 <div style="display:inline-block;vertical-align:middle;align:left">
