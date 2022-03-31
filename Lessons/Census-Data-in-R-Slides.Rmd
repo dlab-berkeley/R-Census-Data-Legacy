@@ -1,6 +1,6 @@
 ---
 title: "Census Data Wrangling and Mapping in R"
-author: "Patty Frontiera & D-Lab Team Geo"
+author: "Patty Frontiera, Irene Farah, Avery Richards"
 date: "4/1/2022"
 output: 
   ioslides_presentation
@@ -153,7 +153,6 @@ Not all census data is available for all geographic tabulation units. For exampl
 
 
 
-
 ## Census Data Workflow
 
 Identify your
@@ -178,11 +177,11 @@ Measuring change over time with census data is *its own thing*, complex, and not
 
 Here are three of the primary websites from which you can directly download census data:
 
--   [data.census.gov](https://data.census.gov/cedsci) or
+-   [data.census.gov](https://data.census.gov/cedsci)
 -   [NHGIS.org](https://www.nhgis.org/)
--   [Social Explorer](https://www.socialexplorer.com/), a subscription service but FREE for UCB community
+-   [Social Explorer](https://www.socialexplorer.com/), a subscription web platform but FREE for UCB community
 
-You can download Census `geographic data` directly on the [census website](https://www.census.gov/geographies/mapping-files.2019.html) or from NHGIS.
+You can download Census `geographic data` directly on the [Census website](https://www.census.gov/programs-surveys/geography/guidance/tiger-data-products-guide.html).
 
 ## Census APIs
 
@@ -230,15 +229,10 @@ Actively maintained and expanding to include more census data products (see `tid
 
 Developed by [Kyle Walker](https://walkerke.github.io/) to make it easier to fetch data from Census APIs in **R** in a `tidy` format to analyze, plot, and map.
 
-Check out his website to keep abreast of his great packages, blog posts, and tutorials.
-
--   <https://walker-data.com/>
+Check out his website(<https://walker-data.com/>) to keep abreast of his great packages, blog posts, and tutorials.
 
 And his new ebook [Analyzing the US Census with R](https://walker-data.com/census-r/), currently available to read online.
 
-Walker also develped a new [DataCamp](https://www.datacamp.com) course: [Analyzing US Census Data in R!](https://www.datacamp.com/courses/analyzing-us-census-data-in-r)
-
--   Highly recommended! First chapter free!
 
 ## [tidycensus tutorials](https://walker-data.com/tidycensus/articles/basic-usage.html)
 
@@ -257,7 +251,6 @@ The **tidyverse** package is an umbrella package that installs all the core tidy
 -   `stringr`, for strings
 -   `forcats`, for factors
 
-*Learn more about the `tidyverse` at <https://www.tidyverse.org>.*
 
 ## [sf](https://r-spatial.github.io/sf/) package
 
@@ -272,15 +265,15 @@ The online book [Geocomputation with R](https://geocompr.robinlovelace.net/) is 
 
 ## [mapview](https://r-spatial.github.io/mapview/)
 
-`mapview` provides functions for quickly and easily create interactive mapping visualizations for data exploration.
+`mapview` provides functions to quickly and easily create interactive maps for data exploration.
 
 <img src="../data/mapview_example.png" width="600px"/></img>
 
 ## Requesting a Census API key
 
-Before you can fetch data from the Census APIs, you must request a free `Census API Key`
+Before you can fetch data from the Census APIs, you must have a free `Census API Key`
 
-Get one now if you don't have one yet!
+Request one now if you don't have one yet!
 
 -   (<https://api.census.gov/data/key_signup.html>)
 
