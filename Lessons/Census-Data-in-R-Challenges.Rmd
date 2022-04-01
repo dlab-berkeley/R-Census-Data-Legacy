@@ -37,7 +37,7 @@ here()
 
 ### Challenge 1
 
-> Use the `get_decennial` function like we've seen above, but fill in the code arguments to fetch State population in 2010 just for California. 
+> Use the `get_decennial` function like we've seen above, but fill in the code arguments to fetch total population in 2010 just for California. 
 
 ```{r, challenge_1_code_A }
 
@@ -46,7 +46,7 @@ here()
         
 ```
 
-Alter the above code to fetch state pop in 2010 for CA, TX and FL
+Alter the above code to fetch total pop in 2010 for CA, TX and FL
 ```{r, challenge_1_code_B }
 
 # add your code here. 
@@ -54,10 +54,9 @@ Alter the above code to fetch state pop in 2010 for CA, TX and FL
 ```
 
 
-
 ### Challenge 2
 
-> You can also filter tidycensus results by `county`. Alter the code above to fetch 2010 population for Alameda & San Francisco Counties.
+> You can also filter tidycensus results by `county`. Alter the code below to fetch 2010 population for Alameda & San Francisco Counties.
 
 
 ```{r}
@@ -77,6 +76,19 @@ get_decennial(geography = "county",              # census tabulation unit
 
 ```
 
+What was the total population in the US in 2010?
+```{r, challenge_2_code_B }
+
+# add your code here. 
+
+```
+
+What census region had the largest population in the US in 2010?
+```{r, challenge_2_code_C }
+
+# add your code here. 
+
+```
 
 ## Challenge 3
 
@@ -142,8 +154,8 @@ Create a `map` of CA Median Age by county in 2010.
 
 ## Challenge 6
 
-> Make a ggplot map of MEDIAN GROSS RENT in San Francisco County by tract
-using data from the ACS 2015—2019 5-year product. 
+> Make a ggplot map of MEDIAN GROSS RENT (`"B25064_001"`) in San Francisco County by tract
+using data from the ACS 2016—2020 5-year dataset 
 
 
 ```{r, challenge_6}
@@ -154,13 +166,13 @@ using data from the ACS 2015—2019 5-year product.
 
 ## Challenge 7
 
->Use `mapview` to create an interactive choropleth map of median household rent.
+>Use `mapview` to create an interactive map of SF median household rent.
 
 ```{r, challenge_7}
 
-#Use mapview to create a map of median household income (`alcc_medrent`).
-# Your code here - See Solutions.R for code.
+# Use mapview to create an interactive map of median household rent (from challenge 6).
+# Your code here
 
 ```
 
-*Check Solutions.Rmd for answers, as needed.* 
+> *Check Census-Data-in-R-Solutions.Rmd for answers, as needed.* 

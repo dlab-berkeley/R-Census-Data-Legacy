@@ -1,0 +1,94 @@
+---
+title: "snippets_to_save_for_later"
+output: html_document
+date: '2022-04-01'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### [Leaflet](https://rstudio.github.io/leaflet/):
+
+Leaflet is the `ggplot2` of interactive mapping. Leaflet in R follows a tidyverse convention, using pipes (%>%) to create layers in the mapping object. We can use leaflet to create interactive maps allowing for more flexibility in design and features we can create. With added complexity in the code, of course! 
+  
+  ```{r}
+
+# Create a color palette
+pal <- colorNumeric(
+  palette = "YlOrRd",
+  domain = med_hhincome$estimate
+)
+
+# specify dataset
+leaflet(med_hhincome) %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>% 
+  # adjust color palette and ploygon features.
+  addPolygons(stroke = FALSE, smoothFactor = 0.2, fillOpacity = .5,
+              color = ~pal(estimate)) %>% 
+  # add legend 
+  addLegend(pal = pal, values = ~estimate,
+            title = "Median Household Income",
+            labFormat = labelFormat(prefix = "$"),
+            position = "bottomleft")
+
+
+```
+
+---
+  ## Appendix
+  
+  ### A More Complex Query
+  
+  Let's use the 2010 census data to map the percent of San Francisco (SF) properties that were rented.
+
+To start, identify the variables for the
+
+- Total number of housing units 
+
+- Number of renter occupied units
+
+### Complete the query
+```{r, eval=F}
+
+sf_rented <- get_decennial(geography =  ,  # census tabulation unit
+                           variables =   , # number of households rented
+                           year =  , 
+                           summary_var = ,  # Total households
+                           state=,
+                           county=,
+                           geometry=)
+```
+
+> And here it is SF Percent Rented Units, 2010 
+
+```{r, eval=F}
+sf_rented <- get_decennial(geography = "tract",  # census tabulation unit
+                           variables =  "H004004", #number of households rented
+                           year = 2010, 
+                           summary_var = "H004001",  # Total households
+                           state='CA',
+                           county='San Francisco',
+                           geometry=T)
+
+# take a look at the output
+head(sf_rented)
+```
+
+
+### Calculate Percent Rented
+
+```{r, eval=F}
+sf_pct_rented <- sf_rented[sf_rented$value > 0,] %>%
+                 mutate(pct = 100 * (value / summary_value))
+
+# Take a look
+head(sf_pct_rented)
+
+```
+
+### Map the result
+```{r, eval=F}
+plot(sf_pct_rented['pct'])
+```
+

@@ -1,7 +1,8 @@
 ---
-title: "Census Data Wrangling and Mapping in R - Tutorial"
+title: "Census Data Wrangling and Mapping in R"
 author: "Patty Frontiera"
-date: "11/17/2021"
+date: "04/01/2022"
+theme: readable
 output: 
   html_document: 
     toc: yes
@@ -12,29 +13,39 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Census Data and `tidycensus`
 
-We will work through several exercises using `tidycensus` to fetch, wrangle, and map census data.
+In this tutorial, we will work through several exercises using the [tidycensus](https://walker-data.com/tidycensus/index.html) R package to fetch, wrangle, and map census data.
 
-## Setup
+The key `tidycensus` functions we will use today are:
 
-Be sure to **clone or downloaded and unzip** the workshop files from: [https://github.com/dlab-berkeley/Census-Data-in-R](https://github.com/dlab-berkeley/Census-Data-in-R)
+-   `census_api_key`: makes your Census API key available to tidycensus
+
+-   `load_variables`: retrieves a dataframe of available census data variables
+
+-   `get_decennial`: fetch census data from a recent decennial censuses - 2000, 2010 (and soon 2020)
+
+-   `get_acs`: fetch census data from an ACS (American Community Survey) 1 or 5 year dataset, 2005 - 2020.
+
+# Setup
+
+Be sure to **clone** or **downloaded and unzip** the workshop files from: <https://github.com/dlab-berkeley/Census-Data-in-R>
 
 Then:
 
-1. Open the folder with the workshop files
+1.  Open the folder with the workshop files
 
-2. Double-click on the R Project file `Census-Data-in-R.Rproj`
+2.  Double-click on the R Project file `Census-Data-in-R.Rproj`
 
-3. This should open RStudio - with the `Files` panel displaying the workshop folder contents.
+3.  This should open RStudio - with the `Files` panel displaying the workshop folder contents.
 
-4. Double-click on the file `Rcensus_data_maps-tutorial.Rmd` to follow along!
+4.  Double-click on the file `Census-Data-in-R.Rmd` to follow along!
 
-*You can also click on the file `Rcensus_data_maps-tutorial.html` in the Files tab to open the workshop tutorial in a web brower.*
+*You can also click on the file `Census-Data-in-R.html` in the Files tab to open the workshop tutorial in a web brower.*
 
-### Install packages
+## Install packages
 
-> If you installed any of these packages awhile ago, (especially `tidycensus`), it's a good idea to install updates when you can (though not during the workshop as things can break!). 
-
+> If you installed any of these packages awhile ago, (especially `tidycensus`), it's a good idea to install updates when you can (though not during the workshop as things can break!).
 
 ```{r}
 
@@ -51,7 +62,7 @@ library(tidycensus)
 
 ```
 
-These seven libraries should be loaded in your environment now. 
+These seven libraries should be loaded in your environment now.
 
 ```{r}
 
@@ -60,46 +71,25 @@ here()
 
 ```
 
-
-
 ## Census API Key
 
 You need a `Census API key` to programmatically fetch census data.
 
-- Get it here (pretty quickly): <https://api.census.gov/data/key_signup.html>
+-   Get it here (pretty quickly): <https://api.census.gov/data/key_signup.html>
 
-- The key will be sent to your email and you will need to click to activate it.
+-   The key will be sent to your email and you will need to click to activate it.
 
-- Keep the email with the key open for use in this workshop.
+-   Keep the email with the key open for use in this workshop.
 
 *For more info on all available Census APIs see: <https://www.census.gov/data/developers/data-sets.html>*
 
-### Census Data 
-
-We'll begin by fetching US Census data with the `tidycensus` R package
-
-The [tidycensus](https://walker-data.com/tidycensus/index.html) package allows R users to quickly fetch data from a select subset of Census databases.
-
-- Many of the code samples in this tutorial borrow heavily from [Kyle Walker's](https://walker-data.com) tidycensus package documentation.
-
-The key tidycensus functions we will use today are:
-
-- `census_api_key`: makes your Census API key available to tidycensus
-
-- `load_variables`: retrieves a dataframe of available census data variables
-
-- `get_decennial`: fetch census data for the most recent decennial censuses - 2000, 2010 (and soon 2020)
-
-- `get_acs`: fetch 2005 - 2020 data from the 1 and 5 year ACS (American Community Survey) data bases
-
-
 ### Add Your Census API Key
 
-Let's get started! 
+To use your Census API Key in R
 
-1. Copy and paste your Census API key from your email
+1.  Copy and paste your Census API key from your email
 
-2. Use the tidycensus function **census_api_key** to register your API key with tidycensus.  **Don't forget to put quotes around the key!**.
+2.  Use the tidycensus function **census_api_key** to register your API key with tidycensus. **Don't forget to put quotes around the key!**.
 
 ```{r, eval=FALSE}
 
@@ -110,12 +100,12 @@ census_api_key("THE_BIG_LONG_ALPHANUMERIC_API_KEY_YOU_GOT_FROM_CENSUS")
 
 Another way to add your Census API Key:
 
-I keep my key in a file so no one can see it. One way to do this is by making a script that creates a variable key, and then using the `source` function to add that script as an object into your coding environment. The code chunk below is an example of how you might do that: 
+I keep my key in a file so no one can see it. One way to do this is by making a script that creates a variable key, and then using the `source` function to add that script as an object into your coding environment. The code chunk below is an example of how you might do that:
 
 ```{r,eval=FALSE}
 
 # source (run) an r script that creates a variable with my key
-source("../../keys/census_api_key.R")
+#source("/Users/pattyf/Documents/Dlab/workshops/keys/census_api_key.R")
 
 #print(my_census_api_key) 
 
@@ -123,12 +113,11 @@ source("../../keys/census_api_key.R")
 census_api_key(key = my_census_api_key)
 ```
 
+# Decennial Census Data
 
-## Decennial Census Data
+## The `get_decennial` function
 
-The `get_decennial` function:
-
-We start by fetching from the 2010 Census with tidycensus's `get_decennial` function. Let's first talk about the code.
+We start by fetching `total population` from the 2010 Census with tidycensus's `get_decennial` function. Let's first talk about the code.
 
 ```{r}
 pop2010 <- get_decennial(geography = "state",   # census tabulation unit
@@ -138,18 +127,39 @@ pop2010 <- get_decennial(geography = "state",   # census tabulation unit
 head(pop2010)          
 ```
 
+## Fetching data for more than one Census variable
 
-> tidycensus data is `tidy`
+We can pass a vector of census identifiers to the `variables` function argument if we want to get data for more than one variable. Below we add `P0002002` for population in urban areas.
 
-By default, tidycensus returns data in a `tidy`, or `long` format that allows data for multiple variables to be contained within the `variable` and `value` columns. This is in contrast to untidy, or `wide` data where each variable is in its own column. 
+```{r}
+pop2010 <- get_decennial(geography="state",
+                         variables = c("P001001","P002002"), # variable(s) of interest
+                         year = 2010)           # census year
 
-tidycensus can return long data if you can add the parameter `output=wide` to the function call.
-  
+# take a look
+head(pop2010)
+```
+
+We can see the data for both variables if we sort the output by county name.
+
+```{r}
+# Sort dataframe by county names (the NAME column)
+pop2010 %>% arrange(NAME) %>% head()
+```
+
+## tidycensus returns `tidy` data
+
+By default, tidycensus returns data in a `tidy`, or `long` format that allows data for multiple variables to be contained within the `variable` and `value` columns.
+
+This is in contrast to untidy, or `wide` data where each variable is in its own column.
+
+tidycensus can return `wide` data if you can add the parameter `output=wide` to the function call.
+
 ```{r}
 
 # wide format
 pop2010w <- get_decennial(geography = "state",   # census tabulation unit
-                         variables = "P001001", # variable(s) of interest
+                         variables = c("P001001","P002002"), # variable(s) of interest
                          year = 2010,           # census year
                          output="wide")         # get output in wide format
 head(pop2010w) 
@@ -157,56 +167,57 @@ head(pop2010w)
 
 ### The `GEOID` column
 
-The `GEOID` column is included in tidycensus output. 
+The `GEOID` column is included in tidycensus output by default.
 
 This is a Census geographic identifier for the tabulation unit.
 
-The `GEOID` is sometimes called the Census `FIPS` code and for most tabulation units these are the same. 
+The `GEOID` is sometimes called the Census `FIPS` code and for most tabulation units these are the same.
 
-- This makes it possible to link to Census geographic data and make maps. (We will do this in a bit.)
+The `GEOID` makes it possible to link to Census demographic data to Census geographic data and make maps. We will do this in a bit.
 
-The `GEOID` is a text string and must be quoted. 
+The `GEOID` is a text string and must be quoted.
 
-- Beware of GEOID leading zeros, since some software will remove these and convert GEIOD values to numbers (rather than text strings).
+-   Beware of GEOID leading zeros, since some software will remove these and convert GEIOD values to numbers (rather than text strings).
 
-### Question:
+> Question: **What is the GEOID for California?**
 
-__What is the GEOID for California?__
+# Census Tabulation Units
 
-## Census Tabulation Units
+Public census data is typically aggregated by census geographies to protect privacy.
 
-Decennial census data is gathered from individuals and publicly distributed in aggregated form to protect privacy.
+These census geographies are called `Census tabulation units`.
 
-The Census tabulation units are the Census geographies to which the census data have been aggregated.
+-   Some of these are real administrative units like states and counties.
+-   Others are statistical units created by the census, like census tracts and block groups.
 
 Some of the most common geographic tabulation units and their tidycensus function abbreviations are shown below, along with **required** and available filters that limit what data are returned.
 
-|Geography    |Definition          |Filter(s)    |Used in tidycensus        |
-|-------------|--------------------|-------------|--------------------------|
-|"us"         |United States       |             |get_acs(), get_decennial()|
-|"region"     |Census region       |             |get_acs(), get_decennial()|
-|"state"      |State or equivalent |state        |get_acs(), get_decennial()|
-|"county"     |County or equivalent|state, county|get_acs(), get_decennial()|
-|"place"      |Census place        |state        |get_acs(), get_decennial()|
-|"tract"      |Census tract        |**state**, county|get_acs(), get_decennial()|
-|"block group"|Census block group  |**state**, county|get_acs(), get_decennial()|
-|"block"      |Census block        |**state**, **county**|get_decennial() only! |
+| Geography     | Definition           | Filter(s)             | Used in tidycensus         |
+|-----------------|-----------------|-----------------|---------------------|
+| "us"          | United States        |                       | get_acs(), get_decennial() |
+| "region"      | Census region        |                       | get_acs(), get_decennial() |
+| "state"       | State or equivalent  | state                 | get_acs(), get_decennial() |
+| "county"      | County or equivalent | state, county         | get_acs(), get_decennial() |
+| "place"       | Census place         | state                 | get_acs(), get_decennial() |
+| "tract"       | Census tract         | **state**, county     | get_acs(), get_decennial() |
+| "block group" | Census block group   | **state**, county     | get_acs(), get_decennial() |
+| "block"       | Census block         | **state**, **county** | get_decennial() only!      |
 
-### `get_decennial` Geographic Tabulation Units and Filters
+## `get_decennial` Tabulation Units and Filters
 
-Let's work together to fill in the code to fetch state population in 2010 just for California. You can find the code in the file `Solutions.R`.
+Let's take a few minutes to practice fetching population data with the `get_decennial` function.
 
-- See `?get_decennial` for help
+-   See `?get_decennial` for help
 
 ### Challenge 1
 
-> Open __Census-Data-in-R-Challenges.Rmd__ and use the `get_decennial` function like we've seen above, but fill in the code arguments to fetch State population in 2010 just for California. *Solutions are available in the Solutions folder, as needed.* 
+> Open **Census-Data-in-R-Challenges.Rmd** and use the `get_decennial` function like we've seen above to fetch population data. *Solutions are available in the Solutions folder, as needed.*
 
-### Change the tabulation unit
+### Changing the tabulation unit
 
-Let's fetch 2010 population data for CA counties 
+Let's fetch 2010 population data for CA counties
 
-__What changes in the code?__
+**What changes in the code?**
 
 ```{r}
 
@@ -216,14 +227,15 @@ get_decennial(geography = "county",              # census tabulation unit
                           state='CA')            # Filter by state is CA
 ```
 
-### Questions
+#### Questions
 
-* How do we specify the state of CA above? How else can we?
-* Can you fetch population data for all counties in the USA or do you need to have a `state=` filter?
+-   How do we specify the state of CA above? How else can we?
+-   Can you fetch population data for all counties in the USA or do you need to have a `state=` filter?
 
 ### Adding a county filter
 
 You can also filter tidycensus results by `county`
+
 ```{r}
 
 get_decennial(geography = "county",              # census tabulation unit
@@ -233,39 +245,25 @@ get_decennial(geography = "county",              # census tabulation unit
                           county='Alameda')      # Filter by county Alameda
 ```
 
-
 ### Challenge 2
 
-> In __Census-Data-in-R-Challenges.Rmd__, alter the code above to fetch 2010 population for Alameda & San Francisco Counties. 
+> In **Census-Data-in-R-Challenges.Rmd**, alter the code above to fetch 2010 population for Alameda & San Francisco Counties. Then try Challenge 2B & 2C.
 
+## Visualizing Results
 
-## Visualize Results
-
-We can visualize the data to get a quick overview of the distribution of data values.
+We can visualize data to get a quick overview of the distribution of the values.
 
 It's a first step in exploratory data analysis and a last step in data communication.
 
-`ggplot2` is the most commonly used R package for data visualization. 
+`ggplot2` is the most commonly used R package for data visualization.
 
-- It is loaded when you load the `tidyverse` package.
+-   It is loaded when you load the `tidyverse` package.
 
 Let's use it to visualize the population data.
 
-## Plot 2010 Population by state
+### Plot 2010 Population by state
 
 Use `ggplot2` to create an ordered horizontal bar chart.
-
-```{r}
-
-pop_plot <- ggplot(data=pop2010, 
-                  aes(x=value, y=reorder(NAME,value)) ) + 
-                  geom_point()
-
-# display the plot
-pop_plot
-```
-
-> You can get real fancy with `ggplot` if you like. 
 
 ```{r}
 
@@ -286,18 +284,23 @@ pop_plot
 
 ```
 
-## Identifying Census Variables
+Developing your `ggplot2` knowledge can really enhance your data analysis skills.
+
+In combination with `tidycensus` it creates a powerful, reproducible data science workflow.
+
+# Identifying Census Variables
 
 In the code above we fetched data for total population in 2010 using the variable `"P001001"`.
 
-That is not an obvious variable name, so how do we get those identifiers?
+That is not an obvious variable name, so how do we get those census data identifiers?
 
-We can use the tidycensus **load_variables** function for this.
+We can use the tidycensus `load_variables` function for this.
 
+## `load_variables` function
 
-### `load_variables` function
+For any census dataset like the decennial census or the ACS 1 or 5-year estimates, use the `load_variables` function to fetch all available variables and identifiers.
 
-Use `load_variables` to fetch all variables used in the 2010 census into a dataframe.
+Since these datasets have many, many variables, save the resulting dataframe to a variable and cache it locally so you do not need to repeatedly retrieve it over the web.
 
 ```{r}
 
@@ -315,56 +318,54 @@ head(vars2010)
 
 ## 2010 Decennial Census Tables & Variables
 
-- Over 3,000 unique variables that describe population and housing characteristics
+-   Over 3,000 unique variables that describe population and housing characteristics
 
-- Organized in `333` Tables
-    - 177 population tables (identified with a ‘‘P’’) available to the block level 
-    - 58 housing tables (identified with an ‘‘H’’) available to the block level
-    - 82 population tables (identified with a ‘‘PCT’’) available to the census tract level
-    - 4 housing tables (identified with an “HCT”) available to the census tract level
-    - 10 population tables (identified with a “PCO”) available to the county level 
-    - plus 2 additional PCT tables
+-   Organized in `333` Tables
 
-<small>https://www.census.gov/data/datasets/2010/dec/summary-file-1.html</small>
+    -   177 population tables (identified with a ''P'') available to the block level
+    -   58 housing tables (identified with an ''H'') available to the block level
+    -   82 population tables (identified with a ''PCT'') available to the census tract level
+    -   4 housing tables (identified with an "HCT") available to the census tract level
+    -   10 population tables (identified with a "PCO") available to the county level
+    -   plus 2 additional PCT tables
 
-### What Variable Has the 2010 Total Population value? 
+<small>See: <https://www.census.gov/data/datasets/2010/dec/summary-file-1.html></small>
 
-We can sort and filter the vars2010 dataframe to find it.
+#### What Variable Has the 2010 Total Population value?
 
-### Questions
+We know this from our previous code blocks, but let's find it for practice navigating the dataframe.
+
+-   Let's sort and filter the `vars2010` dataframe to find it.
+
+#### *Questions:*
 
 What 2010 decennial census variable contains...
 
-- `Median Age` 
+-   `Median Age`
 
-- `Average Family Size`
+-   `Average Family Size`
 
-- `Number of occupied housing units` 
+-   `Number of occupied housing units`
 
-*Answers are in Solutions.Rmd*
+\*See **Census-Data-in-R-Solutions.Rmd** if needed (under Variable Questions)
 
 ### Challenge 3
 
-> Return to __Census-Data-in-R-Challenges.Rmd__ and use the `get_decennial` function to fetch and plot an `Avg Family Size`varaible by CA County in `2010`, and name the call as a dataframe, `ca_fam_size`. Once you've done that, plot the dataframe with the `ggplot`call below. __Hint: "P037001"__ 
-
+> Return to **Census-Data-in-R-Challenges.Rmd** and use the `get_decennial` function to fetch and plot an `Avg Family Size`varaible by CA County in `2010`, and name the call as a dataframe, `ca_fam_size`. Once you've done that, plot the dataframe with the `ggplot`call below. **Hint: "P037001"**
 
 ### Challenge 4
 
-> Repeat the previous challenge with data from the `2000` decennial census.
-Don't assume variable names are the same across the 2000 and 2010 census
+> Repeat the previous challenge with data from the `2000` decennial census. Don't assume variable names are the same across the 2000 and 2010 census
 
-__Use `load_variables` to check!__
+> **Use `load_variables` to check the variable name!**
 
-
-
-## Census Tract Data
+# Census Tract Data
 
 Census tracts are the most commonly used census tabulation unit.
 
 Let's fetch population data for the census tabulation unit to *tract*
 
-> Because of the large number of census tracts, you MUST specify a state when requesting these data with tidycensus.
-
+> Because of the large number of census tracts, you **MUST** specify a state when requesting these data with tidycensus.
 
 ```{r}
 ## Fetch population by **tract** for California.
@@ -380,7 +381,7 @@ dim(ca_tract_pop2010)
 head(ca_tract_pop2010)
 ```
 
-### Fetching Census Tract Data
+## Fetching Census Tract Data
 
 Census tract data can be quite large!
 
@@ -398,10 +399,10 @@ dim(tract_pop2010)
 
 ```
 
+## Customizing tidycensus output
 
-### Fetching data for more than one census variable
+What **two** things are new here?
 
-What **three** things are new here?
 ```{r}
 
 #urban and rural pop for 3 CA counties
@@ -414,32 +415,32 @@ ur_pop10 <- get_decennial(geography = "county",  # census tabulation unit
 
 ```
 
-### Fetching data for more than one census variable
+#### When fetching census data...
 
-1. You can specify more than one variable:
-```
-variables = c("P002002","P002005")
-```
+We have already specified more than one variable:
 
-2. You can rename the values in the output 'variable' column.
-```
-variables = c(urban="P002002",rural="P002005")
-```
+    variables = c("P002002","P002005")
 
-3. You can identify a `summary_var` (a denominator - here, the total count of all people or households surveyed. Can be used for calculations like percent of total.) 
-```
-summary_var = "P002001"
-```
+1.  You can also rename the values in the output 'variable' column.
 
+<!-- -->
+
+    variables = c(urban="P002002",rural="P002005")
+
+2.  You can identify a `summary_var` (a denominator - here, the total count of all people or households surveyed. Can be used for calculations like percent of total.)
+
+<!-- -->
+
+    summary_var = "P002001"
+
+#### Now let's take a look at the resultant dataframe
 
 ```{r}
-
-# take a lookat the results
+# take a look at the results
 ur_pop10
-
 ```
 
-### Calculating Percents
+#### Calculating Percents
 
 The `summary_value` column comes in handy when you want to compute percent of total, for example:
 
@@ -454,12 +455,11 @@ ur_pop10
 
 ```
 
+A plot gives us compact visual summaries of the data.
 
-
-Plots give us compact visual summaries of the data.
 ```{r}
 
-## Plot it
+## Plot it with ggplot2
 myplot <- ggplot(data = ur_pop10, 
           mapping = aes(x = NAME, fill = variable, 
                      y = ifelse(test = variable == "urban", 
@@ -474,14 +474,13 @@ myplot
 
 ```
 
-Don't worry if you don't get all the ggplot code now. It's here for reference. 
+Don't worry if you don't get all the ggplot code now. It's here for reference.
 
-- You may want to check out our *R Data Visualization with ggplot* workshop!
+-   You may want to check out D-Lab's *R Data Visualization with ggplot* workshop!
 
+## Data Wrangling to Combine Data from 2 Censuses
 
-## Data Wrangling
-
-Your R skills can help you reformat the data and make it more usable.
+You can use your R skills to reformat the data and make it more usable.
 
 Let's fetch population data for 2010 and 2000 by state.
 
@@ -503,25 +502,30 @@ pop2010 <- get_decennial(geography = "state",
 state_pop <- bind_rows(pop2000, pop2010)
 
 # Take a look with head or View
-head(state_pop)
+state_pop %>% arrange(NAME) %>% head(10)
 ```
 
-> Any Questions?
+# Saving `tidycensus` output
 
-## Mapping
+The data we fetch using `tidycensus` is stored in an R dataframe.
 
+We can use the `write.csv` or `write_csv` function to save the contents of a dataframe to a CSV file.
 
-Mapping Census Data with `tidycensus`
+```{r}
+write_csv(state_pop, here('data_out/state_pop_2010.csv') )
+```
+
+> **Any Questions?**
+
+# Mapping Census Data
 
 You can fetch census geographic data by adding the parameter **geometry=TRUE** to `tidycensus` functions
 
-* Under the hood, tidycensus calls the `tigris` package to fetch data from the Census Geographic Data APIs.
+-   Under the hood, tidycensus calls the `tigris` package to fetch data from the Census Geographic Data APIs.
 
-* Only a subset of data available via `tigris` can be accessed via `tidycensus`.
+You can then use your favorite R mapping packages like `sf`, `ggplot`, `tmap`, `mapview` and `leaflet` to make maps.
 
-You can then use your favorite R mapping functions or libraries like `plot`, `ggplot`, and `tmap` to make maps.
-
-### Geometry Options
+## Geometry Options
 
 Before fetching census geographic data, we need to set the option `tigris_use_cache` to TRUE
 
@@ -535,10 +539,9 @@ options(tigris_use_cache = TRUE)
 
 ```
 
+## Fetch Geographic Boundary Data with `tidycensus`
 
-### Fetch Geographic Boundary Data with `tidycensus`
-
-We fetch the geospatial data by setting **geometry=TRUE**.
+We fetch the census geographic data by setting **geometry=TRUE**.
 
 ```{r}
 
@@ -553,45 +556,46 @@ pop2010geo <- get_decennial(geography = "state",
 ### Take a look
 
 Let's take a minute to discuss the format of an `sf` spatial object.
+
 ```{r}
 
 head(pop2010geo, 3)
 
 ```
 
-
-## Geospatial Data in R
+# Geospatial Data in R
 
 The `tidycensus` package uses the R `sf` package to manage geospatial data.
 
 R `sf` objects include:
 
-- a dataframe with a `geometry` column with the name  `geometry`
+-   a dataframe with a `geometry` column labeled `geometry`
 
-    - The geometry can be of type POINT, LINE, POLYGON
-    - or, MULTIPOINT, MULTILINE or MULTIPOLGYON
+    -   The geometry can be of type POINT, LINE, POLYGON
+    -   or, MULTIPOINT, MULTILINE or MULTIPOLGYON
 
-- a `CRS` (coordinate reference system), specified by
-    - epsg(SRID) code
-    - proj4string
-    
-For a deeper understanding of the `sf` package and its functionality, we recommend 
+-   a `CRS` (coordinate reference system), specified by
 
-- our [R-Geospatial-Fundamentals](https://github.com/dlab-berkeley/R-Geospatial-Fundamentals) workshop
+    -   epsg(SRID) code
+    -   proj4string
 
-- the [Geocomputation with R ebook](https://geocompr.robinlovelace.net/)
-    
-### Census Data Coordinate Reference System (CRS)
+For a deeper understanding of the `sf` package and its functionality, we recommend
 
-All geospatial data are referenced to the surface of the earth with a CRS, or coordinate reference system.  Anyone working with geospatial data will need to develop an understanding of CRSs.
+-   our [R-Geospatial-Fundamentals](https://github.com/dlab-berkeley/R-Geospatial-Fundamentals) workshop
+
+-   the [Geocomputation with R ebook](https://geocompr.robinlovelace.net/)
+
+## Census Data Coordinate Reference System (CRS)
+
+All geospatial data are referenced to the surface of the earth with a `CRS`, or `coordinate reference system`. Anyone working with geospatial data will need to develop an understanding of CRSs.
 
 Fortunately, many of us are familiar with longitude and latitude, which are geographic coordinates. But there are different versions of geographic CRSs. And there are also projected CRSs which transform longitude and latitude to 2 dimensional surface for mapping & analysis.
 
-All census geographic data use the `NAD83` geographic CRS. `NAD83` stands for North American Datum of 1983. This CRS is best for locations in North America.
+All census geographic data use the `NAD83` geographic CRS. `NAD83` stands for North American Datum of 1983. This CRS (or version of latitude and longitude) is best for locations in North America.
 
-Many geospatial operations require you transform data to a common CRS before conducting spatial analysis or mapping.  
+Many geospatial operations require you transform data to a common CRS before conducting spatial analysis or mapping.
 
-- This could be an issue if you try to combine the census geospatial data with other geospatial data. But it is not an issue in this tutorial.
+-   This could be an issue if you try to combine the census geospatial data with other geospatial data. But it is not an issue in this tutorial.
 
 An in-depth discussion of CRSs is outside the scope of this workshop. See [Geocomputation in R](https://geocompr.robinlovelace.net/reproj-geo-data.html) for more information.
 
@@ -604,12 +608,12 @@ We can use `sf::plot` to make a quick map the geometry stored in an `sf` spatial
 plot(pop2010geo$geometry)
 ```
 
-
 ### The Challenge of US maps
 
 The vast geographic extent and non-contiguous nature of the USA makes it difficult to map.
 
 Fortunately, tidycensus includes a `shift_geo` parameter to shift AK & HI to below Texas.
+
 ```{r}
 
 pop2010geo_shifted <- get_decennial(geography = "state", 
@@ -623,9 +627,9 @@ pop2010geo_shifted <- get_decennial(geography = "state",
 plot(pop2010geo_shifted$geometry)
 ```
 
-### Save it
+## Saving Spatial Objects
 
-You can save any `sf` data object to a shapefile using `st_write`
+You can save any `sf` spatial data object to an [ESRI shapefile](https://en.wikipedia.org/wiki/Shapefile) using `st_write`
 
 ```{r, eval=F}
 
@@ -633,7 +637,7 @@ st_write(pop2010geo_shifted, here("data_out/usa_pop2010_shifted.shp"))
 
 ```
 
-
+Now take a look at the output shapefile.
 
 ```{r, eval=F}
 
@@ -641,12 +645,23 @@ st_write(pop2010geo_shifted, here("data_out/usa_pop2010_shifted.shp"))
 dir(here("data_out")) 
 ```
 
+### ESRI Shapefiles
+
+You can see from this output that an ESRI shapefile is actually a collection of files that all have the same prefix.
+
+Shapefiles are the most common file format for geospatial data. So it's worthwhile to learn more about them if you will be working with census geographic data.
+
+-   Check out the [Shapefile Wikipedia page](https://en.wikipedia.org/wiki/Shapefile) for more information.
+
 ## Mapping Data Values
 
-You can use the sf `plot` command to make a map that sets the color of the geometry by the data values 
+You can use the sf `plot` command to make a map that sets the color of the geometry by the data values
+
+-   This type of map is called a `thematic map`.
+
+-   When the features being plotted are areas (or polygons), it's called a `choropleth` map!
 
 ```{r}
-
 # Name the column with the variable values to make
 # a thematic map, also called a choropleth map.
 plot(pop2010geo_shifted['pop10'])  
@@ -655,7 +670,7 @@ plot(pop2010geo_shifted['pop10'])
 
 ### `ggplot2` Map
 
-ggplot knows what to do with sf objects!
+`ggplot` knows how to map sf objects!
 
 ```{r}
 
@@ -664,7 +679,7 @@ ggplot(pop2010geo_shifted, aes(fill = pop10)) +
 
 ```
 
-Let's make that map a little nicer to look at. 
+If you are familiar with `sf` objects and `ggplot` you can further customize your maps.
 
 ```{r}
 
@@ -679,17 +694,15 @@ ggplot(pop2010geo_shifted, aes(fill = pop10)) +
 
 ### Challenge 5
 
->In your __Census-Data-in-R-Challenges.Rmd__ file, mreate a map of CA Median Age by county in 2010. *Solutions are in the Solutions.Rmd file* 
-
-
+> In your **Census-Data-in-R-Challenges.Rmd** file, create a map of `Median Age by California County in 2010`. *Solutions are in the Census-Data-in-R-Solutions.Rmd file*
 
 ### Fetch Census Data and Geometry for Multiple States or Counties
 
-We can fetch Census data and the **geometry** for more than one state or county with same function call.
+We can fetch Census data and **geometry** for more than one state or county with same function call.
 
-* This is so much easier than any alternative approach!
+-   This is so much easier than any alternative approach!
 
-* It can be applied to any available geographic tabulation areas (eg states, counties, tracts, places).
+-   It can be applied to any available geographic tabulation areas (eg states, counties, tracts, places).
 
 Let's try it with Census Tracts!
 
@@ -711,92 +724,138 @@ bayarea_pop10 <- get_decennial(geography = "tract",
 plot(bayarea_pop10['value'])
 ```
 
-> Questions?
+> **Any Questions?**
 
-## ACS 5-year data
+# Fetching ACS data with `get_acs`
 
-* ACS Data with `get_acs`
+-   ACS data contains the most recent information about the American population.
 
-* ACS data contains the most recent information about the American population.
-
-* We can use the tidycensus function  `get_acs` to retrieve `ACS data` using code very similar to `get_decennial`.
+-   We can use the tidycensus function `get_acs` to retrieve `ACS data` using code very similar to `get_decennial`.
 
 **BUT** the workflow is more complex because:
 
-1. The ACS has a lot more tables and variables, and
+1.  ACS data has a lot more variables, and
 
-2. The ACS contains **sample data**, so each ACS variable that you retrieve with `tidycensus` will fetch both an **estimate** of the value and a **margin of error**.
+2.  ACS data are **sample data**, so each ACS variable that you retrieve with `tidycensus` will fetch both an **estimate** of the value and a **margin of error**.
 
-### ACS Data Products
+## ACS Data Products
 
-The ACS has two primary data products - the ACS 1 year database and the 5 year database. 
+The ACS has two primary data products - the ACS 1 year estimates and the 5 year estimates.
 
-- The ACS 3 year data product has been discontinued.
- 
-- The ACS 1 year data is more current but has a larger margin of error and is not available for Census geographies with a population of < 65,000.
-  
-- So the ACS 5-year data is the most commonly used data set.
+-   The `ACS 1 year estimates` are more current but hasve a larger margin of error and is not available for Census geographies with a population of \< 65,000.
 
-### Fetch List of ACS 5-Year Variables
+-   The `ACS 5-year estimates` are more stable but represent a larger time period.
 
-Let's use the `load_variables` function to get a dataframe of all variables from the ACS 2015—2019 5-year dataset.
+-   *The `ACS 3 year estimates` has been discontinued.*
 
-- Then, find the variable name for `median household income`.
+## Fetch metadata on ACS 5-Year Variables
+
+Let's use the `load_variables` function to get a dataframe of all variables from the ACS 2016---2020 5-year dataset.
+
+-   Note: we change the dataset value to `acs5` where before we used `sf1` to fetch info on the decennial census variables.
 
 ```{r}
 
-vars_acs2019 <- load_variables(year=2019,      # end year 2016-2020 period
+vars_acs2020 <- load_variables(year=2020,       # end year 2016-2020 period
                               dataset = 'acs5', # the ACS data product
-                              cache = T) # Save locally for future access
+                              cache = T)        # Save locally for future use
 
 # how many variables?
-dim(vars_acs2019)
-
-# Take a look at the resultant dataframe
-## What is the variable for median household income?
-#View(vars_acs2019)
+dim(vars_acs2020)
 ```
 
-### Fetch Data on Median Household Income
+### Exploring the ACS Variables
 
-Let's fetch the median household income data for Alameda County by Census Tract.
+View the `vars_acs2020` dataframe to find the variable name for `median household income`.
+
+```{r, eval=FALSE}
+#View(vars_acs2020)
+```
+
+> *Question* Is the variable name for `total population` in the ACS 5 year 2020 data the same as it is in the 2010 census data?
+
+### Fetch ACS Data on Median Household Income
+
+Let's fetch the median household income data for San Francisco County by census tract.
 
 ```{r}
 
-alco_mhhincome <- get_acs(geography='tract',
-                        variables=c(median_hhincome = "B19013_001"),
-                        year = 2019,
+med_hhincome <- get_acs(geography='tract',
+                        variables="B19013_001",
+                        year = 2020,
                         state='CA',
-                        county='Alameda',
-                        geometry=TRUE
+                        county='San Francisco',
+                        geometry=TRUE # get the geography too
                         )
 ```
 
-> Take a look
+Take a look at the output
 
 ```{r}
-
-head(alco_mhhincome)
-
+head(med_hhincome)
 ```
 
+### ACS Output
+
+The census data returned by the `get_acs` function is a bit different from that returned by `get_decennial`.
+
+-   What is the name of the variable containing the income data?
+
+-   What is the name if we set `output="wide"`?
+
+```{r}
+med_hhincome_wide <- get_acs(geography='tract',
+                        variables="B19013_001",
+                        year = 2020,
+                        state='CA',
+                        county='San Francisco',
+                        geometry=TRUE, # get the geography too
+                        output="wide"
+                        )
+                        
+# uncomment and run to view
+# head(med_hhincome_wide)
+```
 
 ### Map Median Household Income by tract
 
-What is the variable?
+Use `sf::plot` to create a map of median household income in San Francisco.
+
 ```{r}
-
-plot(alco_mhhincome['estimate'])
-
+plot(med_hhincome['estimate'])
 ```
+
+*What do you think of that map?*
+
+It's odd because San Francisco County is not the same as the city of San Francisco and what we want to map is the city.
+
+#### Create a map with ggplot
+
+We can use ggplot to zoom in on the city by setting the x axis limits to a narrower geographic range.
+
+```{r}
+ggplot(med_hhincome, aes(fill = estimate)) + 
+  geom_sf() +
+  xlim(-122.55, -122.3)
+  
+```
+
+### Question
+
+> Why do you think we have NA values in the ACS estimates?
 
 ### Fetching Multiple ACS-5 Variables
 
+We can drill down into the ACS data by fetching data for subgroups, where available.
+
+Let's fetch median household income by race.
+
 First identify the variables of interest.
+
 ```{r}
 
 # Median household income by race/ethnicity: Variables from ACS 2015—19
-#All households =   "B19013_001",
+# All households =   "B19013_001",
 inc_by_race <- c(White = "B19013H_001",
                  Black = "B19013B_001",
                  Asian = "B19013D_001",
@@ -815,139 +874,99 @@ alco_mhhinc_by_race <- get_acs(geography='tract',
                                   geometry=T )
 ```
 
-## Facet Map
+## Facet Mapping
+
 Facet maps are a way to create visualizations of `small multiples`, or subsets of the data in order to facilitate comparisons. Here, we use ggplot's `facet_wrap` function to make multiple maps of median household income by race for Alameda County.
 
 ```{r}
-
 # Create the map
 medhhinc_facet_map <- alco_mhhinc_by_race %>%
                         ggplot(aes(fill = estimate)) +
                           facet_wrap(~variable) +
-                          geom_sf(color=NA) +
+                          geom_sf(color=NA) +   # why color=NA?
                           scale_fill_viridis_c(option="magma")
 
 # Display the map
 medhhinc_facet_map
-<<<<<<< HEAD:Rcensus_data_maps-tutorial.Rmd
-```
-
-## Challenge
-
-Make a ggplot map of MEDIAN GROSS RENT (DOLLARS) in San Francisco County by tract
-using data from the ACS 2015—2019 5-year product.
-```{r, eval=F}
-# Fill in the code to fetch the data - (Solutions.R has the code)
-
-# Median household rent for San Francisco County
-alcc_medrent <- get_acs(geography= ,
-                              variables= ,
-                              year = ,
-                              state= ,
-                              county= ,
-                              geometry=)
-=======
->>>>>>> 28914a878c5f685ff5f665f2dd8401dee89f99f1:Lessons/Census-Data-in-R.Rmd
-
 ```
 
 ### Challenge 6
 
-> In __Census-Data-in-R-Challenges.Rmd__ file, Make a ggplot map of MEDIAN GROSS RENT in San Francisco County by tract using data from the ACS 2015—2019 5-year product. *Check Solutions.Rmd for answers, as needed.* 
+> In **Census-Data-in-R-Challenges.Rmd** file, Make a ggplot map of MEDIAN GROSS `RENT` in San Francisco County by tract using data from the ACS 2016---2020 5-year product. *Check Census-Data-in-R-Solutions.Rmd for answers, as needed.*
 
+> **Any Questions?**
 
-
-## Interactive Mapping
-
+# Interactive Mapping
 
 Interactive mapping gives the RStudio environment some of the functionality of desktop GIS.
 
 There are a number of R packages that you can use, including:
 
-- [mapview](https://r-spatial.github.io/mapview/): quick interactive exploratory data viewing
-  
-- [tmap](https://cran.r-project.org/web/packages/tmap/vignettes/tmap-getstarted.html): great static and interactive maps
-  
-- [Leaflet](https://rstudio.github.io/leaflet/): highly customizable interactive maps
+-   [mapview](https://r-spatial.github.io/mapview/): quick interactive exploratory data viewing
 
-*All of these are based on the Leaflet Javascript Library.*
+-   [tmap](https://cran.r-project.org/web/packages/tmap/vignettes/tmap-getstarted.html): great static and interactive maps
 
-### Interactive Choropleth Maps
+-   [Leaflet](https://rstudio.github.io/leaflet/): highly customizable interactive maps
 
+*All of these are based on the `Leaflet Javascript Library`.*
 
-Let's use `mapview` to make some quick interactive maps of our median hhousehold income data
+### [mapview](https://r-spatial.github.io/mapview/)
 
-```{r}
-
-mapview(alco_mhhincome)
-
-```
-
+Let's use `mapview` to make quick interactive maps of the median hhousehold income data
 
 ```{r}
 
-mapview(alco_mhhincome, zcol="estimate")
+mapview(med_hhincome)
 
 ```
 
+When passed the name of an `sf` object and no other options, `mapview` will:
 
-Leaflet is the `ggplot2` of interactive mapping. Leaflet in R follows a tidyverse convention, using pipes (%>%) to create layers in the mapping object. We can use leaflet to create interactive maps allowing for more flexibility in design and features we can create. With added complexity in the code, of course! 
+-   display the geometry using a single color for the fill and for the stroke
+
+-   display the feature ID `on hover`
+
+-   display the data from the dataframe `on click`
+
+#### Mapview Thematic Maps
+
+The `zcol` argument will take a column name and color the features by the values in that column.
 
 ```{r}
 
-# Create a color palette
-pal <- colorNumeric(
-  palette = "YlOrRd",
-  domain = alco_mhhincome$estimate
-)
-
-# specify dataset
-leaflet(alco_mhhincome) %>% 
-   addProviderTiles(providers$CartoDB.Positron) %>% 
-  # adjust color palette and ploygon features.
-  addPolygons(stroke = FALSE, smoothFactor = 0.2, fillOpacity = .5,
-     color = ~pal(estimate)) %>% 
-  # add legend 
-  addLegend(pal = pal, values = ~estimate,
-            title = "Median Income",
-            labFormat = labelFormat(prefix = "$"),
-            position = "bottomleft")
-
+mapview(med_hhincome, zcol="estimate")
 
 ```
 
- 
 ### Challenge 7
 
-> In the Census-Data-in-R-Challenges.Rmd, use `mapview` to create an interactive choropleth map of median household rent.
+> In the **Census-Data-in-R-Challenges.Rmd**, use `mapview` to create an interactive map of median household rent.
 
+## Determining what ACS Variables to use
 
-### Figuring out the ACS Variables to use
-
-ACS variables can be confusing. 
+ACS variables can be confusing.
 
 Some ways to identify the best variables to explore:
 
-- Web search, especially Census web resources, can help.
+-   Web search, especially Census web resources, can help.
 
-- The Census Reporter website (https://censusreporter.org) provides another tool for navigating topics, tables, and variable names.
+-   The Census Reporter website (<https://censusreporter.org>) provides another tool for navigating topics, tables, and variable names.
 
-- The NHGIS website (nhgis.org) is a great way to browse variables of interest.
+-   The NHGIS website (nhgis.org) is a great way to browse variables of interest.
 
- 
-### Margins of Error (MOE)
+## ACS Margins of Error (MOE)
 
 We haven't talked about it but it may be important in your work with ACS data.
 
 Math is needed to combine MOEs when you combine variables.
 
-- `tidycensus` includes some nice [functions](https://walker-data.com/tidycensus/articles/margins-of-error.html) for these calculations and a good overview of the topic.
+-   `tidycensus` includes some nice [functions](https://walker-data.com/tidycensus/articles/margins-of-error.html) for these calculations and a good overview of the topic.
 
-## Summary
+# Summary
 
-`tidycensus` offers two key functions for fetching census tabular and geographic: **get_acs** and **get_decennial**.  
+`tidycensus` offers two key functions for fetching census tabular and geographic: **get_acs** and **get_decennial**.
 
-- The **load_variables** function helps identify the names of census variables of interest.
+-   The **load_variables** function helps identify the names of census variables of interest.
 
 Support for fetching `population estimates` and `migration flow` census data was recently added to tidycensus. You can read up on it on the [tidycensus documentation website](https://walker-data.com/tidycensus/articles/other-datasets.html)
 
@@ -955,82 +974,24 @@ Using `tidycensus` to fetch the tabular data or both tabular and geographic data
 
 This approach is also scaleable if you want multiple census variables for various locations and tabulation areas.
 
-You can greatly enhance your maps if you make them with `ggplot2` rather than the default `plot` command.
+You can make publication or report ready maps with highly customizable `ggplot2` code or use the `sf::plot` command to make quick maps.
 
 Interactive mapping greatly enhances your ability to do exploratory data analysis in RStudio.
-
 
 ### References
 
 Much of this tutorial is based on resources by Kyle Walker, author of `tidycensus`. See:
 
-- [tidycensus webpage](https://walker-data.com/tidycensus/index.html))
-- [Analyzing the US Census with R](https://walker-data.com/census-r), an online book.
+-   [tidycensus webpage](https://walker-data.com/tidycensus/index.html))
+-   [Analyzing the US Census with R](https://walker-data.com/census-r), an online book.
 
 Related D-Lab Workshops
 
-- [R Fundamentals](https://github.com/dlab-berkeley/R-Fundamentals)
-- [Geospatial Data in R, parts 1, 2, & 3](https://github.com/dlab-berkeley/R-Geospatial-Fundamentals)
+-   [R Fundamentals](https://github.com/dlab-berkeley/R-Fundamentals)
+-   [Geospatial Data in R, parts 1, 2, & 3](https://github.com/dlab-berkeley/R-Geospatial-Fundamentals)
 
 Great online resource for working with spatial data in R
 
-- [Geocomputation with R](https://geocompr.robinlovelace.net/)
+-   [Geocomputation with R](https://geocompr.robinlovelace.net/)
 
-
----
-
-## Appendix
-
-### A More Complex Query
-
-Let's use the 2010 census data to map the percent of San Francisco (SF) properties that were rented.
-
-To start, identify the variables for the
-
-- Total number of housing units 
-
-- Number of renter occupied units
-
-### Complete the query
-```{r, eval=F}
-
-sf_rented <- get_decennial(geography =  ,  # census tabulation unit
-                           variables =   , # number of households rented
-                           year =  , 
-                           summary_var = ,  # Total households
-                           state=,
-                           county=,
-                           geometry=)
-```
-
-> And here it is SF Percent Rented Units, 2010 
-
-```{r, eval=F}
-sf_rented <- get_decennial(geography = "tract",  # census tabulation unit
-                           variables =  "H004004", #number of households rented
-                           year = 2010, 
-                           summary_var = "H004001",  # Total households
-                           state='CA',
-                           county='San Francisco',
-                           geometry=T)
-
-# take a look at the output
-head(sf_rented)
-```
-
-
-### Calculate Percent Rented
-
-```{r, eval=F}
-sf_pct_rented <- sf_rented[sf_rented$value > 0,] %>%
-                 mutate(pct = 100 * (value / summary_value))
-
-# Take a look
-head(sf_pct_rented)
-
-```
-
-### Map the result
-```{r, eval=F}
-plot(sf_pct_rented['pct'])
-```
+------------------------------------------------------------------------

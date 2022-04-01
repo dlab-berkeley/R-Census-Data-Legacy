@@ -1,7 +1,7 @@
 ---
 title: "Census Data Wrangling and Mapping in R"
-author: "Patty Frontiera"
-date: "11/18/2021"
+author: "Patty Frontiera, Irene Farah, Avery Richards"
+date: "4/1/2022"
 output: 
   ioslides_presentation
 editor_options: 
@@ -19,142 +19,145 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Welcome! While we're waiting:
 
-* Navigate to the workshop webpage: <https://github.com/dlab-berkeley/Census-Data-in-R>
+-   Navigate to the workshop webpage: <https://github.com/dlab-berkeley/Census-Data-in-R>
 
-* Scroll down and read the `Readme` section.
+-   Scroll down and read the `Readme` section.
 
-* **Clone or download** the workshop files by clicking on the green `CODE` button.
+-   **Clone or download** the workshop files by clicking on the green `CODE` button.
 
-    - If you download the zipfile, **unzip it**.
-    
-    - Make a note of the folder in which the workshop files reside. 
-    
+    -   If you download the zipfile, **unzip it**.
+
+    -   Make a note of the folder in which the workshop files reside.
 
 ## Introduction
 
-- About me
+-   About me
 
-- About you
-    - Your familiarity with US Census data
-    - With geospatial data
-    - With geospatial data in R
+-   About you
+
+    -   Your familiarity with US Census data
+    -   With geospatial data
+    -   With geospatial data in R
 
 ## Outline
 
-- **Brief** overview of the primary US Census data products
+-   **Brief** overview of the primary US Census data products
 
-- Introduce R packages for working with census data
+-   Introduce R packages for working with census data
 
-- Use those packages to fetch census data
+-   Use those packages to fetch census data
 
-- Use those packages to fetch census data plus census geographic boundary files
+-   Use those packages to fetch census data plus census geographic boundary files
 
-- Make maps of census data
+-   Make maps of census data
 
 # Census Data Overview
 
-## US Census Data
+## US Census Bureau
 
 The "nation's leading provider of quality data about its people and economy."
 
-<img src="data/census_page.png" width="700px"></img>
-
-Available at <https://www.census.gov>
+<img src="../data/census_page.png" width="700px"/></img> - <https://www.census.gov>
 
 ## Primary Census Products
 
-- Decennial Census
+-   Decennial Census
 
-- American Community Survey (ACS)
+-   American Community Survey (ACS)
 
 ## Decennial Census
 
-Complete count of the population every 10 years since `1790` 
+Complete count of the population every 10 years since `1790`
 
-A snapshot of the American population in time.
+A snapshot of the American population in time, with an `April 1` reference date.
 
-Includes data on 
+Includes data on
 
-- Population, by sex, age, race/ethnicity, and family / household relationships
+-   `Population`: by sex, age, race/ethnicity, and family / household relationships
 
-- Housing, by occupancy (occupied, vacant), tenure (owned, rented), and group quarters
+-   `Housing`: by occupancy (occupied, vacant), tenure (owned, rented), and group quarters
 
 From 1840 to 2000, additional questions were asked of a `sample` of the population.
 
-- See [https://www.census.gov/history/www/through_the_decades/index_of_questions/](https://www.census.gov/history/www/through_the_decades/index_of_questions/)
-
-
+-   See <https://www.census.gov/history/www/through_the_decades/index_of_questions/>
 
 ## American Community Survey (ACS)
 
-Since 2005, the `American Community Survey (ACS)` has replaced the decennial census sample data questions.
+Since 2005, the `American Community Survey (ACS)` has replaced the decennial census `sample` data questions.
 
-- Annual survey of a sample of about 3.5 million households conducted over a 1, 3 or 5 year period.
+-   Annual survey of a sample of about 3.5 million households released for 1, 3 or 5 year period.
 
-- Provides `estimates` of demographic, social, economic, and housing characteristics
+-   Provides `period estimates` of demographic, social, economic, and housing characteristics
 
-- Includes `margin of error` values for the estimates
-
- 
-## Decennial Census* versus ACS Data
-| Demographic*    | Social             | Economic          | Housing           |
-|-----------------|--------------------|-------------------|-------------------|
-| Sex             | Families           | Income            | Tenure*           |
-| Age             | Education          | Benefits          | Occupancy*        |
-| Race            | Marital Status     | Employment Status | Group quarters*   |
-| Hispanic Origin | Fertility          | Occupation        | Housing Value     |
-| Relationships   | Grandparents       | Industry          | Taxes & Insurance |
-|                 | Veterans           | Commuting         | Utilities         |
-|                 | Disability Status  | Place of Work     | Mortgage          |
-|                 | Language at Home   | Health Insurance  | Monthly Rent      |
-|                 | Citizenship        |                   | Structure Type    |
-|                 | Mobility           |                   |                   |
-
-
-## Census Geographies
-
-Census microdata (data collected from individuals) are publicly available at one or more levels of geographic aggregation, or `tabulation unit`. 
-
-- Tabulation units include states, counties, census tracts, block groups, blocks, etc.
-
-Not all data tables are available all geographies, e.g., only decennial census data are available at the block level.
-
-
-## Census Geographic Tabulation Units
-
-<img src="data/census_geo_hierarchy.png" width="600px"></img>
-
-
-
-## Census Data and Census Geographies
-
-<img src="data/census_data_by_prod_geo.png" width="1000px"></img>
+-   Includes `margin of error` values for the estimates
 
 ## ACS Data Products
 
-ACS 1-year and 5-year products are currently available through 2019
+ACS 1-year and 5-year estimates are currently available through 2020
 
-- New data is released at the end of the next year (e.g., 2020 data in Dec 2021)
-- But COVID is causing a [delay in the release dates](https://www.census.gov/programs-surveys/acs/news/data-releases/2020/release-schedule.html) 
+-   New data is released at the end of the next year (e.g., 2020 data in Dec 2021)
+-   But COVID is causing a [delay in the release dates](https://www.census.gov/programs-surveys/acs/news/data-releases/2020/release-schedule.html) and the `2020 data was just released!!`
 
-ACS 3-year no longer available (2008—2013)
+`ACS 3-year` no longer available (2008---2013)
 
-ACS 5-year data provides much better estimates, lower margins of error
-
-- More data tables are available for ACS 5-year product
+-   More data tables are available for the ACS 5-year estimates than for the ACS 1 year or ACS 3 year estimates.
 
 See: [Census ACS: Guidance for Data Users](https://www.census.gov/programs-surveys/acs/guidance.html)
 
+## [ACS Period Estimates](https://www.census.gov/programs-surveys/decennial-census/decade/2020/news/blog-posts.html)
+
+The `ACS 1 year estimates` include data from a sample of the population collected over a one year period.
+
+Five years of data are pooled together, weighted and processed as a whole dataset to create the `ACS 5 year estimates`.
+
+Use the `ACS 1 year estimates` when you want the `most current data` and are less concerned about precision (larger margins of error). However, the ACS 1 year estimates are only available for areas with large populations (+65,000) and for a subset of data tables.
+
+Use the `ACS 5 year estimates` when you want `more stability in the estimates`, more data tables, and smaller geographic tabulation units. But can be tricky to interpret the data if the five year period is not stable (e.g., covid and 2016-2022 ACS 5yr.)
+
+## 
+
+| Demographic\*        | Social            | Economic          | Housing           |
+|------------------|------------------|------------------|------------------|
+| Sex                  | Families          | Income            | Tenure\*          |
+| Age                  | Education         | Benefits          | Occupancy\*       |
+| Race                 | Marital Status    | Employment Status | Group quarters\*  |
+| Hispanic Origin      | Fertility         | Occupation        | Housing Value     |
+| Relationships        | Grandparents      | Industry          | Taxes & Insurance |
+|                      | Veterans          | Commuting         | Utilities         |
+|                      | Disability Status | Place of Work     | Mortgage          |
+|                      | Language at Home  | Health Insurance  | Monthly Rent      |
+|                      | Citizenship       |                   | Structure Type    |
+| *\*decennial census* | Mobility          |                   |                   |
+
+## Census Geographies
+
+Census data is collected from individuals. The individual-level response data is called `microdata`.
+
+For privacy reasons, only a very limited subset of census microdata is publicly available as the [Public Use Microdata Samples (PUMS)](https://www.census.gov/programs-surveys/acs/microdata.html) data.
+
+Most census data is made publicly available only when aggregated to a geographic `tabulation unit`.
+
+-   Tabulation units include states, counties, census tracts, block groups, blocks, etc.
+
+Not all census data is available for all geographic tabulation units. For example, only decennial census data are available at the block level.
+
+## Census Geographic Tabulation Units
+
+<img src="../data/census_geo_hierarchy.png" width="600px"/></img>
+
+## Census Data and Census Geographies
+
+<img src="../data/census_data_by_prod_geo.png" width="1000px"/></img>
 
 ## Census Data Workflow
 
-Identify your 
+Identify your
 
-- Topic of interest, e.g., population by age, income, monthly rents, etc...
-- Dataset: Decennial Census or ACS?
-- Year(s): for what time period?
-- Geographic tabulation unit of aggregation (county, tract, etc.)
-- Geographic filter by state(s) or counties
+-   `Topic of interest`, e.g., population by age, income, monthly rents, etc...
+-   `Dataset`: Decennial Census or ACS 1-yr or ACS 5-yr?
+-   `Year(s)`: for what time period?
+-   `Geographic tabulation unit` of aggregation (county, tract, etc.)
+-   `Geographic filter` by state(s) or counties
 
 Then determine what specific census variables are available for your topic.
 
@@ -166,27 +169,27 @@ Then determine what specific census variables are available for your topic.
 
 Measuring change over time with census data is *its own thing*, complex, and not covered by this workshop!
 
-## Accessing Census Data
+## Getting Census Data
 
-Here are three of the primary websites from which you can directly access and download census data:
+Here are three of the primary websites from which you can directly download census data:
 
-- [data.census.gov](https://data.census.gov/cedsci) or 
-- [NHGIS.org](https://www.nhgis.org/)
-- [Social Explorer](https://www.socialexplorer.com/), a subscription service but FREE for UCB community
+-   [data.census.gov](https://data.census.gov/cedsci)
+-   [NHGIS.org](https://www.nhgis.org/)
+-   [Social Explorer](https://www.socialexplorer.com/), a subscription web platform but FREE for UCB community
 
-You can download Census `geographic data` directly on the [census website](https://www.census.gov/geographies/mapping-files.2019.html) or from NHGIS.
+You can download Census `geographic data` directly on the [Census website](https://www.census.gov/programs-surveys/geography/guidance/tiger-data-products-guide.html).
 
 ## Census APIs
 
 You can write code to fetch data from the [Census Web APIs](https://www.census.gov/data/developers/data-sets.html)
 
-- `API`: application programming interface
+-   `API`: application programming interface
 
-- `Web API`: URLs can be formatted to make queries that return data
+-   `Web API`: URLs can be formatted to make queries that return data
 
 Or you can leverage an existing R package to make this easier!
 
-- That's what we will do!
+-   That's what we will do!
 
 *Only a subset of recent Census data products are available via APIs.*
 
@@ -196,14 +199,13 @@ Or you can leverage an existing R package to make this easier!
 
 These are the ones we recommend and will use today.
 
-- [tidycensus](https://walker-data.com/tidycensus/)
+-   [tidycensus](https://walker-data.com/tidycensus/)
 
-- [tidyverse](https://www.tidyverse.org/)
-   
-- [sf](https://r-spatial.github.io/sf/)
+-   [tidyverse](https://www.tidyverse.org/)
 
-- [mapview](https://r-spatial.github.io/mapview/)
+-   [sf](https://r-spatial.github.io/sf/)
 
+-   [mapview](https://r-spatial.github.io/mapview/)
 
 ## [tidycensus](https://walker-data.com/tidycensus/)
 
@@ -211,89 +213,78 @@ An R package with functions that make it easier to fetch decennial census and AC
 
 Only a limited set of Census data available via `tidycensus`
 
-- Decennial census: 1990, 2000, and 2010
-  
-- ACS 1 yr: 2005 through 2019
-  
-- ACS 5 yr: 2005—2009 through 2015—2019 are available. 
-    
+-   Decennial census: 1990, 2000, and 2010
+
+-   ACS 1 yr: 2005 through 2019
+
+-   ACS 5 yr: 2005---2009 through 2015---2019 are available.
+
 Actively maintained and expanding to include more census data products (see `tidycensus` website)
 
-    
 ## About [tidycensus](https://walker-data.com/tidycensus/)
 
 Developed by [Kyle Walker](https://walkerke.github.io/) to make it easier to fetch data from Census APIs in **R** in a `tidy` format to analyze, plot, and map.
 
-Check out his website to keep abreast of his great packages, blog posts, and tutorials.
-
-- https://walker-data.com/
+Check out his website(<https://walker-data.com/>) to keep abreast of his great packages, blog posts, and tutorials.
 
 And his new ebook [Analyzing the US Census with R](https://walker-data.com/census-r/), currently available to read online.
 
-Walker also develped a new [DataCamp](https://www.datacamp.com) course: [Analyzing US Census Data in R!](https://www.datacamp.com/courses/analyzing-us-census-data-in-r)
-
-- Highly recommended! First chapter free!
-
 ## [tidycensus tutorials](https://walker-data.com/tidycensus/articles/basic-usage.html)
 
-<img src="data/tidycensus_articles.png"></img>
-
+<img src="../data/tidycensus_articles.png"/></img>
 
 ## [tidyverse](https://www.tidyverse.org)
 
 The **tidyverse** package is an umbrella package that installs all the core tidyverse packages and makes them easier to manage and load in R, including:
 
-- `ggplot2`, for data visualization
-- `dplyr`, for data manipulation
-- `tidyr`, for data tidying
-- `readr`, for data import
-- `purrr`, for functional programming
-- `tibble`, for tibbles, a modern re-imagining of data frames
-- `stringr`, for strings
-- `forcats`, for factors
-
-*Learn more about the `tidyverse` at <https://www.tidyverse.org>.*
-
+-   `ggplot2`, for data visualization
+-   `dplyr`, for data manipulation
+-   `tidyr`, for data tidying
+-   `readr`, for data import
+-   `purrr`, for functional programming
+-   `tibble`, for tibbles, a modern re-imagining of data frames
+-   `stringr`, for strings
+-   `forcats`, for factors
 
 ## [sf](https://r-spatial.github.io/sf/) package
 
 `Simple features` for geospatial data objects and methods.
 
-- The main R package for working with vector geospatial data
-    - `vector`: locations represented as points, lines and polygons
-    
+-   The main R package for working with vector geospatial data
+    -   `vector`: locations represented as points, lines and polygons
+
 `sf` is loaded and used automatically by `tidycensus`.
 
 The online book [Geocomputation with R](https://geocompr.robinlovelace.net/) is a great resource for learning about the `sf` package and working with geospatial data in R.
 
 ## [mapview](https://r-spatial.github.io/mapview/)
 
-`mapview` provides functions for quickly and easily create interactive mapping visualizations for data exploration.
+`mapview` provides functions to quickly and easily create interactive maps for data exploration.
 
-<img src="data/mapview_example.png" width="600px"></img>
+<img src="../data/mapview_example.png" width="600px"/></img>
 
 ## Requesting a Census API key
 
-Before you can fetch data from the Census APIs, you must request a free `Census API Key`
+Before you can fetch data from the Census APIs, you must have a free `Census API Key`
 
-Get one now if you don't have one yet!
+Request one now if you don't have one yet!
 
- - (https://api.census.gov/data/key_signup.html)
+-   (<https://api.census.gov/data/key_signup.html>)
 
 # Hands-on Tutorial Time!
 
 ## Setup
 
-**Clone or downloaded and unzip** the workshop files from: [https://github.com/dlab-berkeley/Census-Data-in-R](https://github.com/dlab-berkeley/Census-Data-in-R)
+**Clone or downloaded and unzip** the workshop files from: <https://github.com/dlab-berkeley/Census-Data-in-R>
 
 Then:
 
-1. Open the folder with the workshop files
+1.  Open the folder with the workshop files
 
-2. Double-click on the R Project file `Census-Data-in-R.Rproj`
+2.  Double-click on the R Project file `Census-Data-in-R.Rproj`
 
-3. This should open RStudio - with the `Files` panel displaying the workshop folder contents.
+3.  This should open RStudio - with the `Files` panel displaying the workshop folder contents.
 
-4. Double-click on the file `Rcensus_data_maps-tutorial.Rmd` to follow along!
+4.  Double-click on the file `Census-Data-in-R.Rmd` in the `Lessons` folder to follow along!
 
-*You can also open the file `Rcensus_data_maps-tutorial.html` in the RStudio Files tab to follow along in a web brower.*
+- You can also open the file `Census-Data-in-R.html` to follow along in a web brower.

@@ -22,12 +22,15 @@ pacman::p_load(
 
 # These six libraries should be loaded in your environment now. 
 
+# Tigris options - used by tidycensus
+# Cache retrieved geographic data locally
+options(tigris_use_cache = TRUE)  
 ```
 
 
 ```{r, challenge_1A_solution}
 
-## Fill in the code to fetch State population in 2010 just for California
+## Fill in the code to fetch total population in 2010 just for California
 get_decennial(geography = "state",   # census tabulation unit
               variables = "P001001", # variable(s) of interest
               year = 2010,           # census year
@@ -38,7 +41,7 @@ get_decennial(geography = "state",   # census tabulation unit
 
 ```{r, challenge_1B_solution}
 
-## fetch state pop in 2010 for CA, TX and FL
+## fetch total pop in 2010 for CA, TX and FL
 get_decennial(geography = "state",             # census tabulation unit
               variables = "P001001",           # variable(s) of interest
               year = 2010,                     # census year
@@ -48,7 +51,8 @@ get_decennial(geography = "state",             # census tabulation unit
 ```
 
 
-```{r, challenge_2_solution}
+
+```{r, challenge_2A_solution}
 
 ## fetch 2010 population for Alameda & San Francisco Counties
 get_decennial(geography = "county",              # census tabulation unit
@@ -58,11 +62,34 @@ get_decennial(geography = "county",              # census tabulation unit
               county=c('Alameda',
                        'San Francisco'))         # filter by County
 
+```
+```{r, challenge_2B_solution}
 
-        
+## Fill in the code to fetch total population in 2010 the US
+get_decennial(geography = "us",   # census tabulation unit
+              variables = "P001001", # variable(s) of interest
+              year = 2010)           # census year
 
 ```
 
+```{r, challenge_2C_solution}
+
+## Fill in the code to fetch total population in 2010  census regions
+get_decennial(geography = "region",   # census tabulation unit
+              variables = "P001001", # variable(s) of interest
+              year = 2010)           # census year
+```
+
+```{Variable Questions}
+# Search vars2010
+## vars20210 <- load_variables(2010, dataset='sf1', cache=T)
+
+- `Median Age`: "P013001"
+
+- `Average Family Size`: "P037001"
+
+- `Number of occupied housing units` : "H003002"
+```
 
 ```{r, challenge_3_solution}
 
@@ -70,15 +97,16 @@ get_decennial(geography = "county",              # census tabulation unit
 ca_fam_size <- get_decennial(geography='county',   # census tabulation unit
                             variables="P037001",   # variable(s) of interest
                             state='CA',            # filter by state, county,
-                            county=c('Alameda',    # and year. 
-                            year=2010))
+                            year=2010)             # and year. 
+                            
 
-# plot it
+# create a ggplot
 ca_fam_size %>%
   ggplot(aes(x = value, y = reorder(NAME, value))) + 
   geom_point()
-
-        
+  
+# display the ggplot
+ca_fam_size
 
 ```
 
@@ -120,21 +148,20 @@ ca_med_age %>%
 
 ```{r, challenge_6_solution }
 
-
+# Fetch the data
 # Median household rent for San Francisco County
-#using data from the ACS 2015—2019 5-year product.
+# using data from the ACS 2016—2020 5-year product.
 sf_medrent <- get_acs(geography="tract",
-                        variables=c(median_rent2019="B25064_001"),
-                        year =2019,
+                        variables=c(median_rent="B25064_001"),
+                        year =2020,
                         state="CA",
                         county=c("San Francisco"),
                         geometry=T)
 
-# Map it with plot
+# Map it with plot - remove rows with NAs
 plot(sf_medrent[!is.na(sf_medrent$estimate),]['estimate'])
 
-# Map it with ggplot
-
+# Map it with ggplot - remove rows with NAs
 sf_medrent %>%
   drop_na(estimate)  %>%
   ggplot(aes(fill = estimate)) + 
@@ -142,13 +169,16 @@ sf_medrent %>%
   coord_sf(crs = 26910) +  # CRS for Northern CA - UTM 10 
   scale_fill_viridis_c(option = "magma") 
 
-
 ```
 
 
 ```{r, challenge_7_solution }
 
+# simple interactive map
+mapview(sf_medrent)
 
-
+# thematic (or choropleth) map of median rent
+mapview(sf_medrent, zcol='estimate')
 
 ```
+
